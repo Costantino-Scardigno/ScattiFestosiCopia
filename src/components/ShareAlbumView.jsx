@@ -19,7 +19,7 @@ const SharedAlbumView = () => {
 
     try {
       const response = await fetch(
-        `https://scattifestosi-back-end-production.up.railway.app/api/events/share/${shareCode}`,
+        `http://localhost:8080/api/events/share/${shareCode}`,
         {
           method: "GET",
           headers: {

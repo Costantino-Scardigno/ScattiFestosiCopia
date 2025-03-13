@@ -36,7 +36,7 @@ const AlbumView = ({
     setLoading(true);
 
     fetch(
-      `https://scattifestosi-back-end-production.up.railway.app/api/events/${selectedAlbum.id}?includeDetails=true`,
+      `http://localhost:8080/api/events/${selectedAlbum.id}?includeDetails=true`,
       {
         method: "GET",
         headers: {

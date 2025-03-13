@@ -62,7 +62,7 @@ const Dashboard = () => {
 
     try {
       const response = await fetch(
-        `https://scattifestosi-back-end-production.up.railway.app/api/events/${albumId}`,
+        `http://scattifestosi-back-end-production.up.railway.app/api/events/${albumId}`,
         {
           method: "DELETE",
           headers: {
@@ -139,7 +139,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("authToken");
 
     fetch(
-      "https://scattifestosi-back-end-production.up.railway.app/api/events?includeDetails=true",
+      "http://scattifestosi-back-end-production.up.railway.app/api/events?includeDetails=true",
       {
         method: "GET",
         headers: {
@@ -169,16 +169,13 @@ const Dashboard = () => {
     setIsLoadingShared(true);
     const token = localStorage.getItem("authToken");
 
-    fetch(
-      "https://scattifestosi-back-end-production.up.railway.app/api/events/shared?includeDetails=true",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    fetch("http://localhost:8080/api/events/shared?includeDetails=true", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Errore nel recupero degli album condivisi!");
@@ -241,7 +238,7 @@ const Dashboard = () => {
     try {
       // Verifica se la foto è già piaciuta per determinare l'azione da eseguire
       const checkResponse = await fetch(
-        `https://scattifestosi-back-end-production.up.railway.app/api/likes/photo/${photoId}/status`,
+        `http://localhost:8080/api/likes/photo/${photoId}/status`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -259,8 +256,8 @@ const Dashboard = () => {
       // Esegue l'azione (like o unlike)
       const response = await fetch(
         isLiked
-          ? `https://scattifestosi-back-end-production.up.railway.app/api/likes/photo/${photoId}`
-          : `https://scattifestosi-back-end-production.up.railway.app/api/likes`,
+          ? `http://localhost:8080/api/likes/photo/${photoId}`
+          : `http://localhost:8080/api/likes`,
         {
           method: isLiked ? "DELETE" : "POST",
           headers: {
@@ -288,20 +285,17 @@ const Dashboard = () => {
     if (!token) return;
 
     try {
-      const response = await fetch(
-        "https://scattifestosi-back-end-production.up.railway.app/api/comments",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            content: commentText,
-            photoId: photoId,
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:8080/api/comments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          content: commentText,
+          photoId: photoId,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error("Errore nell'aggiunta del commento");
@@ -323,7 +317,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("authToken");
 
       const response = await fetch(
-        `https://scattifestosi-back-end-production.up.railway.app/api/events/${albumId}?includeDetails=true`,
+        `http://localhost:8080/api/events/${albumId}?includeDetails=true`,
         {
           method: "GET",
           headers: {
