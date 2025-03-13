@@ -30,7 +30,7 @@ const ShareAlbumModal = ({
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `http://scattifestosi-back-end-production.up.railway.app/api/events/${selectedAlbum.id}/share`,
+        `https://scattifestosi-back-end-production.up.railway.app/api/events/${selectedAlbum.id}/share`,
         {
           method: "POST",
           headers: {

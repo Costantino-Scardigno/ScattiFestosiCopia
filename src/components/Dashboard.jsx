@@ -62,7 +62,7 @@ const Dashboard = () => {
 
     try {
       const response = await fetch(
-        `http://scattifestosi-back-end-production.up.railway.app/api/events/${albumId}`,
+        `https://scattifestosi-back-end-production.up.railway.app/api/events/${albumId}`,
         {
           method: "DELETE",
           headers: {
@@ -139,7 +139,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("authToken");
 
     fetch(
-      "http://scattifestosi-back-end-production.up.railway.app/api/events?includeDetails=true",
+      "https://scattifestosi-back-end-production.up.railway.app/api/events?includeDetails=true",
       {
         method: "GET",
         headers: {
@@ -170,7 +170,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("authToken");
 
     fetch(
-      "http://scattifestosi-back-end-production.up.railway.app/api/events/shared?includeDetails=true",
+      "https://scattifestosi-back-end-production.up.railway.app/api/events/shared?includeDetails=true",
       {
         method: "GET",
         headers: {
@@ -241,7 +241,7 @@ const Dashboard = () => {
     try {
       // Verifica se la foto è già piaciuta per determinare l'azione da eseguire
       const checkResponse = await fetch(
-        `http://scattifestosi-back-end-production.up.railway.app/api/likes/photo/${photoId}/status`,
+        `https://scattifestosi-back-end-production.up.railway.app/api/likes/photo/${photoId}/status`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -259,8 +259,8 @@ const Dashboard = () => {
       // Esegue l'azione (like o unlike)
       const response = await fetch(
         isLiked
-          ? `http://scattifestosi-back-end-production.up.railway.app/api/likes/photo/${photoId}`
-          : `http://scattifestosi-back-end-production.up.railway.app/api/likes`,
+          ? `https://scattifestosi-back-end-production.up.railway.app/api/likes/photo/${photoId}`
+          : `https://scattifestosi-back-end-production.up.railway.app/api/likes`,
         {
           method: isLiked ? "DELETE" : "POST",
           headers: {
@@ -289,7 +289,7 @@ const Dashboard = () => {
 
     try {
       const response = await fetch(
-        "http://scattifestosi-back-end-production.up.railway.app/api/comments",
+        "https://scattifestosi-back-end-production.up.railway.app/api/comments",
         {
           method: "POST",
           headers: {
@@ -323,7 +323,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("authToken");
 
       const response = await fetch(
-        `http://scattifestosi-back-end-production.up.railway.app/api/events/${albumId}?includeDetails=true`,
+        `https://scattifestosi-back-end-production.up.railway.app/api/events/${albumId}?includeDetails=true`,
         {
           method: "GET",
           headers: {

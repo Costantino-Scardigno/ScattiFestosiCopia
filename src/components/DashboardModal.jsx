@@ -27,7 +27,7 @@ const DashboardModal = ({
       const token = localStorage.getItem("authToken");
 
       const response = await fetch(
-        "http://scattifestosi-back-end-production.up.railway.app/api/events",
+        "https://scattifestosi-back-end-production.up.railway.app/api/events",
         {
           method: "POST",
           headers: {
@@ -56,7 +56,7 @@ const DashboardModal = ({
           formData.append("eventId", newAlbum.id);
 
           const uploadResponse = await fetch(
-            "http://scattifestosi-back-end-production.up.railway.app/api/photos/upload",
+            "https://scattifestosi-back-end-production.up.railway.app/api/photos/upload",
             {
               method: "POST",
               headers: {

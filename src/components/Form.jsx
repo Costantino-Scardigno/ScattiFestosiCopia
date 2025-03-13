@@ -52,7 +52,7 @@ function Form({ show, onClose }) {
 
     try {
       const response = await fetch(
-        "http://scattifestosi-back-end-production.up.railway.app/api/auth/signin",
+        "https://scattifestosi-back-end-production.up.railway.app/api/auth/signin",
         {
           method: "POST",
           headers: {
@@ -145,7 +145,7 @@ function Form({ show, onClose }) {
       console.log("Invio dati registrazione:", newUser);
 
       const response = await fetch(
-        "http://scattifestosi-back-end-production.up.railway.app/api/auth/signup",
+        "https://scattifestosi-back-end-production.up.railway.app/api/auth/signup",
         {
           method: "POST",
           headers: {
