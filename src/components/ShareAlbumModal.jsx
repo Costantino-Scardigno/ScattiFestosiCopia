@@ -30,7 +30,7 @@ const ShareAlbumModal = ({
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `http://localhost:8080/api/events/${selectedAlbum.id}/share`,
+        `https://scattifestosi.netlify.app/api/events/${selectedAlbum.id}/share`,
         {
           method: "POST",
           headers: {
