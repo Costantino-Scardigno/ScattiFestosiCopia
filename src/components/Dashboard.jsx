@@ -62,7 +62,7 @@ const Dashboard = () => {
 
     try {
       const response = await fetch(
-        `http://scattifestosi-back-end-production.up.railway.app/api/events/${albumId}`,
+        `http://localhost:8080/api/events/${albumId}`,
         {
           method: "DELETE",
           headers: {
