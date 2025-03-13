@@ -26,18 +26,21 @@ const DashboardModal = ({
     try {
       const token = localStorage.getItem("authToken");
 
-      const response = await fetch("http://localhost:8080/api/events", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name: albumTitle,
-          description: albumDescription,
-          eventDate: new Date(),
-        }),
-      });
+      const response = await fetch(
+        "http://scattifestosi-back-end-production.up.railway.app/api/events",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name: albumTitle,
+            description: albumDescription,
+            eventDate: new Date(),
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Errore durante la creazione dell'album");
@@ -53,7 +56,7 @@ const DashboardModal = ({
           formData.append("eventId", newAlbum.id);
 
           const uploadResponse = await fetch(
-            "http://localhost:8080/api/photos/upload",
+            "http://scattifestosi-back-end-production.up.railway.app/api/photos/upload",
             {
               method: "POST",
               headers: {
