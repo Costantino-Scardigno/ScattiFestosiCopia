@@ -15,7 +15,7 @@ const DashboardModal = ({
 
   const createNewAlbum = async () => {
     // Validazione
-    if (!albumTitle.trim()) 
+    if (!albumTitle.trim()) {
       setError("Il titolo dell'album è obbligatorio");
       return;
     }
