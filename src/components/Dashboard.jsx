@@ -138,16 +138,13 @@ const Dashboard = () => {
   const fetchAllAlbums = () => {
     const token = localStorage.getItem("authToken");
 
-    fetch(
-      "http://scattifestosi-back-end-production.up.railway.app/api/events?includeDetails=true",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    fetch("http://localhost:8080/api/events?includeDetails=true", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Errore nella richiesta!");
