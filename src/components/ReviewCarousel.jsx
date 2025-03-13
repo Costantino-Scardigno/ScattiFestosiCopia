@@ -2,7 +2,6 @@ import React from "react";
 
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
-import "./ReviewCarousel.css";
 import { Card2 } from "./Card2";
 
 function ReviewCarousel() {
