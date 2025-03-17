@@ -6,7 +6,7 @@ import UploadPhotoModal from "./UploadPhotoModal";
 import ShareAlbumModal from "./ShareAlbumModal";
 import "./Dashboard.css";
 import DashboardModal from "./DashboardModal";
-import DashboardSideBar from "./DashboardSidebar.jsx";
+import DashboardSideBar from "./DashboardSideBar.jsx";
 
 const Dashboard = () => {
   // Stati principali
