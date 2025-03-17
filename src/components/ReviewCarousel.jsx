@@ -8,11 +8,13 @@ function ReviewCarousel() {
   return (
     <section
       id="recensioni"
-      className="carousel slide h-review pb-5 pt-6 "
+      className="carousel slide h-review  bg-light-custom mt-5 py-xl-5"
       data-bs-ride="carousel"
       data-bs-interval="2000"
     >
-      <h2 className="display-1 text-black text-center  ">Recensioni</h2>
+      <h2 className="display-1 text-primary-custom text-center mt-5">
+        Recensioni
+      </h2>
       <div className="carousel-inner">
         {/* Prima slide */}
         <div className="carousel-item active">
@@ -58,7 +60,7 @@ function ReviewCarousel() {
         data-bs-target="#reviewCarousel"
         data-bs-slide="prev"
       >
-        <IoIosArrowBack className="fs-1 text-black me-5 d-none d-xxl-block mt-5m " />
+        <IoIosArrowBack className="fs-1 text-primary-custom me-5 d-none d-xxl-block mt-5m " />
       </button>
 
       <button
@@ -67,7 +69,7 @@ function ReviewCarousel() {
         data-bs-target="#reviewCarousel"
         data-bs-slide="next"
       >
-        <IoIosArrowForward className="fs-1 text-black d-none d-xxl-block mt-5m  " />
+        <IoIosArrowForward className="fs-1 text-primary-custom d-none d-xxl-block mt-5m  " />
       </button>
     </section>
   );

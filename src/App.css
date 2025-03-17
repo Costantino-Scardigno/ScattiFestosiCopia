@@ -1,14 +1,210 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
 
-html {
-  scroll-snap-type: y mandatory;
-}
-body {
-  background-color: #fefeec;
-  font-family: "Montserrat", sans-serif;
+/* Schema colori personalizzato */
+
+:root {
+  --primary-color: #352208; /* Marrone scuro */
+  --secondary-color: #e1bb80; /* Beige/oro chiaro */
+  --primary-light: #4a3010; /* Versione più chiara del marrone */
+  --secondary-light: #f9e3c0; /* Versione più chiara del beige */
+  --white-custom: #ffffff;
+  --light-custom: #f8f3ea; /* Sfondo chiaro con un tocco del beige */
+  --border-color: #d4ad6a; /* Versione più scura del beige per i bordi */
+  --muted-color: #7c6340; /* Testo secondario */
+  --danger: #dc3545; /* Colore per pulsanti di eliminazione */
 }
 
-section,
-footer {
-  scroll-snap-align: star;
+/* Colori di sfondo */
+.bg-primary-custom {
+  background-color: var(--primary-color);
+}
+
+.bg-secondary-custom {
+  background-color: var(--secondary-color);
+}
+
+.bg-light-custom {
+  background-color: var(--light-custom);
+}
+
+.bg-white-custom {
+  background-color: var(--white-custom);
+}
+
+.bg-secondary-light {
+  background-color: var(--secondary-color);
+  opacity: 0.3;
+}
+
+.bg-dashboard {
+  background-color: var(--light-custom);
+}
+
+.bg-card-photo {
+  background-color: var(--white-custom);
+  border-top: 1px solid var(--border-color);
+}
+
+.bg-review {
+  background-color: transparent;
+}
+
+/* Colori testo */
+.text-primary-custom {
+  color: var(--primary-color);
+}
+
+.text-secondary-custom {
+  color: var(--secondary-color);
+}
+
+.text-muted-custom {
+  color: var(--muted-color);
+}
+
+/* Pulsanti */
+.btn-primary-custom {
+  background-color: var(--primary-color);
+  color: var(--white-custom);
+  border: 1px solid var(--primary-color);
+}
+
+.btn-primary-custom:hover {
+  background-color: var(--primary-light);
+}
+
+.btn-secondary-custom {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+}
+
+.btn-secondary-custom:hover {
+  background-color: var(--secondary-light);
+}
+
+.btn-outline-custom {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.btn-outline-custom:hover {
+  background-color: var(--light-custom);
+}
+
+.btn-delete-custom {
+  background-color: var(--secondary-light);
+  color: var(--primary-color);
+  border: 1px solid var(--secondary-light);
+}
+
+.btn-delete-custom:hover {
+  background-color: #f7ddb2;
+}
+
+/* Bottoni della dashboardtab */
+.btn-dash {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+}
+
+.btn-white {
+  background-color: var(--white-custom);
+  color: var(--primary-color);
+  border: 1px solid var(--border-color);
+}
+
+/* Bottone album specifico */
+.btn-info1,
+.btn-album {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+}
+
+.btn-info1:hover,
+.btn-album:hover {
+  background-color: var(--secondary-light);
+}
+
+/* Bordi */
+.border-custom {
+  border-color: var(--border-color);
+}
+
+.border-dashed-custom {
+  border: 2px dashed var(--border-color);
+}
+
+.border-bottom,
+.border-top,
+.border-start {
+  border-color: var(--border-color) !important;
+}
+
+/* Stili per i form */
+.form-select,
+.form-control {
+  color: var(--primary-color);
+  border-color: var(--border-color);
+}
+
+.form-select:focus,
+.form-control:focus,
+input:focus,
+textarea:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 0.25rem rgba(225, 187, 128, 0.25);
+}
+
+/* Animazioni */
+.btn-animated-album {
+  transition: all 0.3s ease;
+}
+
+.btn-animated-album:hover {
+  transform: translateY(-2px);
+}
+
+/* Spinner */
+.spinner-border.text-secondary-custom,
+.spinner-border.text-primary {
+  color: var(--secondary-color);
+}
+
+/* Alert */
+.alert-info {
+  background-color: var(--secondary-light);
+  color: var(--primary-color);
+  border-color: var(--secondary-color);
+}
+
+/* Card */
+.card.bg-info1 {
+  background-color: var(--white-custom);
+  border: 1px solid var(--border-color);
+}
+
+.card-title,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.display-4,
+.display-6 {
+  color: var(--primary-color);
+}
+
+/* QR code */
+.modal-backdrop {
+  background-color: rgba(53, 34, 8, 0.5);
+}
+
+/* Font effect */
+.font-effect {
+  color: var(--primary-color);
 }

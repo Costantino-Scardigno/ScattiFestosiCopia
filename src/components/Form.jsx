@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./Form.css";
 import { Link, useNavigate } from "react-router-dom";
+import "./Form.css";
 
 function Form({ show, onClose }) {
   const [activeForm, setActiveForm] = useState("register"); // "register" di default
@@ -229,7 +230,7 @@ function Form({ show, onClose }) {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content rounded-5">
             {/* Header del modale */}
-            <div className="modal-header bg-form rounded-top-5">
+            <div className="modal-header bg-secondary-custom rounded-top-5">
               <h5 className="modal-title display-5 fw-bold text-accent">
                 {activeForm === "register" ? "Registrazione" : "Login"}
               </h5>
@@ -240,7 +241,7 @@ function Form({ show, onClose }) {
                 aria-label="Chiudi"
               ></button>
             </div>
-            <div className="modal-body bg-form d-flex justify-content-evenly rounded-bottom-5">
+            <div className="modal-body  d-flex justify-content-evenly rounded-bottom-5">
               {/* Contenitore slider */}
               <div style={{ overflow: "hidden" }}>
                 <div
@@ -277,7 +278,7 @@ function Form({ show, onClose }) {
                         </label>
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control form-placeholder"
                           id="nome"
                           placeholder="Inserisci il tuo username"
                           value={registerUsername}
@@ -291,9 +292,9 @@ function Form({ show, onClose }) {
                         </label>
                         <input
                           type="email"
-                          className="form-control"
+                          className="form-control form-placeholder"
                           id="email"
-                          placeholder="nome@esempio.com"
+                          placeholder="LaTuaEmail@esempio.com"
                           value={registerEmail}
                           onChange={(e) => setRegisterEmail(e.target.value)}
                           required
@@ -305,7 +306,7 @@ function Form({ show, onClose }) {
                         </label>
                         <input
                           type="password"
-                          className="form-control"
+                          className="form-control form-placeholder"
                           id="password"
                           placeholder="Inserisci la password"
                           value={registerPassword}
@@ -316,7 +317,7 @@ function Form({ show, onClose }) {
                       <div className="d-flex justify-content-center">
                         <button
                           type="submit"
-                          className="btn btn-album w-50 btn-animated-album"
+                          className="btn-animated-album btn btn-secondary-custom w-50  mt-3"
                           disabled={isRegistering}
                         >
                           {isRegistering ? (
@@ -374,7 +375,7 @@ function Form({ show, onClose }) {
                         </label>
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control form-placeholder"
                           id="usernameLogin"
                           placeholder="Inserisci il tuo username"
                           value={userName}
@@ -391,7 +392,7 @@ function Form({ show, onClose }) {
                         </label>
                         <input
                           type="password"
-                          className="form-control"
+                          className="form-control form-placeholder"
                           id="passwordLogin"
                           placeholder="Inserisci la password"
                           value={userPassword}
@@ -402,7 +403,7 @@ function Form({ show, onClose }) {
                       <div className="d-flex justify-content-center">
                         <button
                           type="submit"
-                          className="btn btn-album btn-animated-album w-50"
+                          className="btn-animated-album btn btn-secondary-custom w-50  mt-3"
                           disabled={isLoggingIn}
                         >
                           {isLoggingIn ? (
@@ -419,7 +420,7 @@ function Form({ show, onClose }) {
                           )}
                         </button>
                       </div>
-                      <div className="mt-3 text-center">
+                      <div className="mt-5 text-center">
                         <span>Se ancora non hai un account, </span>
                         <a
                           className="text-custom-info text-decoration-none"

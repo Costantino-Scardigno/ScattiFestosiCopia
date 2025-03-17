@@ -83,9 +83,12 @@ const ShareAlbumModal = ({
 
   return (
     <div className="modal-backdrop">
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header bg-form rounded-top-4">
-          <h5 className="modal-title">Condividi Album</h5>
+      <div
+        className="modal-content bg-light-custom"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="modal-header bg-secondary-custom rounded-top-4">
+          <h5 className="modal-title text-primary-custom">Condividi Album</h5>
           <button
             type="button"
             className="btn-close"
@@ -96,10 +99,15 @@ const ShareAlbumModal = ({
         <div className="modal-body p-4">
           {isLoading ? (
             <div className="text-center py-4">
-              <div className="spinner-border text-primary" role="status">
+              <div
+                className="spinner-border text-secondary-custom"
+                role="status"
+              >
                 <span className="visually-hidden">Caricamento...</span>
               </div>
-              <p className="mt-2">Generazione del link di condivisione...</p>
+              <p className="mt-2 text-primary-custom">
+                Generazione del link di condivisione...
+              </p>
             </div>
           ) : error ? (
             <div className="alert alert-danger" role="alert">
@@ -107,19 +115,19 @@ const ShareAlbumModal = ({
             </div>
           ) : (
             <>
-              <p className="mb-3">
+              <p className="mb-3 text-primary-custom">
                 Condividi l'album "{selectedAlbum?.name}" con i tuoi amici
                 utilizzando il link sottostante:
               </p>
               <div className="input-group mb-3">
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control border-custom"
                   value={shareLink}
                   readOnly
                 />
                 <button
-                  className="btn btn-outline-primary d-flex align-items-center"
+                  className="btn btn-secondary-custom d-flex align-items-center"
                   type="button"
                   onClick={copyToClipboard}
                 >
@@ -139,7 +147,7 @@ const ShareAlbumModal = ({
 
               <div className="d-flex justify-content-center mt-4">
                 <button
-                  className="btn btn-outline-secondary d-flex align-items-center"
+                  className="btn btn-outline-custom d-flex align-items-center"
                   onClick={toggleQrCode}
                 >
                   <QrCode size={18} className="me-2" />
@@ -149,10 +157,10 @@ const ShareAlbumModal = ({
 
               {qrVisible && (
                 <div className="text-center mt-4">
-                  <div className="d-inline-block p-3 bg-white rounded shadow-sm">
+                  <div className="d-inline-block p-3 bg-white-custom rounded shadow-sm">
                     <QRCodeSVG value={shareLink} size={200} />
                   </div>
-                  <p className="mt-2 text-muted">
+                  <p className="mt-2 text-muted-custom">
                     Scansiona questo QR code per aprire l'album
                   </p>
                 </div>
@@ -166,7 +174,7 @@ const ShareAlbumModal = ({
           )}
         </div>
         <div className="modal-footer">
-          <button className="btn btn-secondary" onClick={onClose}>
+          <button className="btn btn-secondary-custom" onClick={onClose}>
             Chiudi
           </button>
         </div>

@@ -5,8 +5,7 @@ import { FaFacebookSquare } from "react-icons/fa";
 function Footer() {
   return (
     <footer className="py-4 bg-footer w-100 mt-5m ">
-      <div className="container">
-        {/* Sezione superiore con logo e link */}
+      <div className="container-fluid">
         <div className="row pb-3 border-bottom justify-content-center">
           <div className="col-12 col-md-6 d-flex justify-content-center justify-content-md-center align-items-center mb-3 mb-md-0">
             <a
@@ -30,7 +29,7 @@ function Footer() {
           </div>
         </div>
 
-        {/* Sezione inferiore con informazioni e social */}
+        {/* Sezione  con informazioni e social */}
         <div className="row pt-3 justify-content-center justify-content-lg-between">
           <div className="col text-center d-flex flex-column flex-md-row align-items-center gap-2">
             <span>©2025 All rights reserved</span>

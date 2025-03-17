@@ -235,14 +235,17 @@ const PhotoView = ({
   // Mostra un indicatore di caricamento
   if (loading) {
     return (
-      <div className="card shadow-sm">
+      <div className="card shadow-sm border-custom">
         <div
           className="card-body d-flex justify-content-center align-items-center"
           style={{ minHeight: "400px" }}
         >
           <div className="text-center">
-            <Loader className="animate-spin mb-3" size={40} />
-            <p>Caricamento dettagli foto...</p>
+            <Loader
+              className="animate-spin mb-3 text-secondary-custom"
+              size={40}
+            />
+            <p className="text-primary-custom">Caricamento dettagli foto...</p>
           </div>
         </div>
       </div>
@@ -252,11 +255,11 @@ const PhotoView = ({
   // Mostra eventuali errori
   if (error) {
     return (
-      <div className="card shadow-sm">
+      <div className="card shadow-sm border-custom">
         <div className="card-body">
           <div className="alert alert-danger">{error}</div>
           <button
-            className="btn btn-outline-secondary"
+            className="btn btn-outline-custom"
             onClick={() => setSelectedPhoto(null)}
           >
             Torna all'album
@@ -278,15 +281,17 @@ const PhotoView = ({
       : 0;
 
   return (
-    <div className="card shadow-sm">
+    <div className="card shadow-sm border-custom">
       <div className="card-header bg-dashboard d-flex align-items-center">
         <button
           className="bg-dashboard border-0 rounded-circle me-2"
           onClick={() => setSelectedPhoto(null)}
         >
-          <ArrowLeft size={30} color="#5b8fd2" />
+          <ArrowLeft size={30} color="#e1bb80" />
         </button>
-        <h5 className="mb-0">Foto da {selectedAlbum.name}</h5>
+        <h5 className="mb-0 text-primary-custom">
+          Foto da {selectedAlbum.name}
+        </h5>
       </div>
 
       <div className="row g-0">
@@ -308,27 +313,30 @@ const PhotoView = ({
               <div className="d-flex align-items-center gap-3">
                 <button
                   className={`btn btn-sm ${
-                    isLiked ? "text-danger" : "text-muted"
+                    isLiked ? "text-danger" : "text-muted-custom"
                   } d-flex align-items-center d-flex flex-column flex-md-row`}
                   onClick={handleToggleLike}
                 >
                   <Heart
-                    className="me-1 "
+                    className="me-1"
                     size={18}
                     fill={isLiked ? "currentColor" : "none"}
                   />
                   <span>{likesCount} mi piace</span>
                 </button>
-                <button className="btn btn-sm text-muted d-flex align-items-center d-flex flex-column flex-md-row">
-                  <MessageSquare className="me-1 text-primary" size={18} />
+                <button className="btn btn-sm text-muted-custom d-flex align-items-center d-flex flex-column flex-md-row">
+                  <MessageSquare
+                    className="me-1 text-secondary-custom"
+                    size={18}
+                  />
                   <span>{comments.length} commenti</span>
                 </button>
               </div>
               <div className="d-flex align-items-center gap-2">
-                <small className="text-muted">
+                <small className="text-muted-custom">
                   {formatDate(photo.timestamp)}
                 </small>
-                <button className="btn btn-sm text-muted">
+                <button className="btn btn-sm text-muted-custom">
                   <Share2 size={18} />
                 </button>
               </div>
@@ -345,9 +353,9 @@ const PhotoView = ({
             ref={commentsContainerRef}
             style={{ maxHeight: "568px" }}
           >
-            <h6 className="mb-3">Commenti</h6>
+            <h6 className="mb-3 text-primary-custom">Commenti</h6>
             {displayedComments.length === 0 ? (
-              <p className="text-muted text-center my-5">
+              <p className="text-muted-custom text-center my-5">
                 Nessun commento. Sii il primo a commentare!
               </p>
             ) : (
@@ -359,24 +367,24 @@ const PhotoView = ({
                   >
                     <div className="d-flex">
                       <div
-                        className="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center me-2"
+                        className="rounded-circle bg-secondary-custom d-flex align-items-center justify-content-center me-2"
                         style={{ width: "32px", height: "32px" }}
                       >
-                        <User size={16} className="text-primary" />
+                        <User size={16} className="text-primary-custom" />
                       </div>
                       <div>
                         <div>
-                          <span className="small fw-medium">
+                          <span className="small fw-medium text-primary-custom">
                             {comment.username || comment.user}
                           </span>
                           <span
-                            className="ms-2 text-muted"
+                            className="ms-2 text-muted-custom"
                             style={{ fontSize: "0.75rem" }}
                           >
                             {formatDate(comment.createdAt) || comment.time}
                           </span>
                         </div>
-                        <p className="mb-0 small">
+                        <p className="mb-0 small text-primary-custom">
                           {comment.content || comment.text}
                         </p>
                       </div>
@@ -396,7 +404,7 @@ const PhotoView = ({
                 {loadingMoreComments && (
                   <div className="text-center py-2">
                     <div
-                      className="spinner-border spinner-border-sm text-secondary"
+                      className="spinner-border spinner-border-sm text-secondary-custom"
                       role="status"
                     >
                       <span className="visually-hidden">Caricamento...</span>
@@ -410,16 +418,16 @@ const PhotoView = ({
           <div className="p-3 border-top">
             <div className="d-flex">
               <div
-                className="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center me-2"
+                className="rounded-circle bg-secondary-custom d-flex align-items-center justify-content-center me-2"
                 style={{ width: "32px", height: "32px" }}
               >
-                <User size={16} className="text-primary" />
+                <User size={16} className="text-primary-custom" />
               </div>
-              <div className="input-group ">
+              <div className="input-group">
                 <input
                   type="text"
                   placeholder="Aggiungi un commento..."
-                  className="form-control rounded-pill pe-4 rounded-end-0  "
+                  className="form-control rounded-pill pe-4 rounded-end-0"
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   onKeyUp={(e) => {
@@ -430,11 +438,11 @@ const PhotoView = ({
                 />
                 <div className="input-group-append">
                   <button
-                    className="btn rounded-end-4 border-start-0 rounded-top-0 rounded-start-0 border-primary-subtle bg-white"
+                    className="btn rounded-end-4 border-start-0 rounded-top-0 rounded-start-0 border-custom bg-white-custom"
                     onClick={handleAddComment}
                     disabled={!newComment.trim()}
                   >
-                    <Send size={16} />
+                    <Send size={16} className="text-secondary-custom" />
                   </button>
                 </div>
               </div>

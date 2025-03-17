@@ -1,36 +1,33 @@
-nav {
-  background-color: #fefeec;
+.navbar {
+  background-color: #f8f3ea !important;
+  border-color: #d4ad6a !important;
 }
 
-.btn-animated {
-  position: relative;
-  border: none;
-  background-color: transparent;
-  padding-bottom: 8px;
+.nav-link:hover {
+  color: #e1bb80 !important;
 }
 
-.btn-animated::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 1px;
-  width: 0;
-  background-color: black;
-  transition: width 0.3s ease-in-out;
-}
-
-.btn-animated:hover::after {
-  width: 100%;
+.btn-sign {
+  background-color: #e1bb80 !important;
+  color: #352208 !important;
+  border-color: #d4ad6a !important;
+  transition: all 0.3s ease;
 }
 
 .btn-sign:hover {
-  background-color: #dd732c;
-}
-.btn-sign .react-icon {
-  color: #242402;
+  background-color: #f9e3c0 !important;
+  transform: translateY(-2px);
 }
 
-.btn-sign:hover .react-icon {
-  color: white;
+.btn-animated {
+  transition: all 0.3s ease;
+}
+
+.btn-animated:hover {
+  color: #e1bb80 !important;
+  transform: translateY(-2px);
+}
+
+.react-icon {
+  margin-left: 8px;
 }

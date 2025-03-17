@@ -1,64 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
-
 .padding-top-5 {
-  padding-top: 100px;
-  padding-bottom: 50px;
-  margin-bottom: 20px;
-}
-
-.btn-info1 {
-  background-color: #d8eeef;
-  box-shadow: -4px 4px 0 0 rgba(0, 0, 0, 0.767);
-  border: 2px solid;
-}
-
-.btn-info1:hover {
-  box-shadow: 0 0;
-  transform: translateY(0.18rem);
-  background-color: #7dc6f1c9;
-  border: 2px solid;
-}
-.btn-album {
-  background-color: #e7f11d;
-  box-shadow: -4px 4px 0 0 rgba(0, 0, 0, 0.767);
-  border: 2px solid;
-}
-.btn-album:hover {
-  box-shadow: 0 0;
-  transform: translateY(0.18rem);
-  background-color: #dc722b;
-  border: 2px solid;
-}
-#a9b11cc4 .btn-animated-album {
-  position: relative;
-  overflow: hidden;
-  transition: background-color 0.3s ease;
-}
-
-.btn-animated-album::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -103%;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.3);
-  transform: skewX(-20deg);
-  transition: left 0.5s ease-in-out;
-}
-
-.btn-animated-album:hover::before {
-  left: 103%;
-}
-
-.div-c {
-  width: 200px;
-  height: 400px;
-}
-.bg-img {
-  background-image: url(https://i.pinimg.com/736x/4c/c7/b6/4cc7b6428f143311c33cef56b6eb8eda.jpg);
-  object-fit: cover;
-  background-position: center;
+  padding-top: 170px;
+  padding-bottom: 20px;
 }
 
 @media (max-width: 1440px) {

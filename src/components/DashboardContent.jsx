@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import "./Dashboard.css";
 import {
   Plus,
   Camera,
@@ -8,6 +9,8 @@ import {
   MessageSquare,
   Search,
   X,
+  AlertTriangle,
+  Loader,
 } from "lucide-react";
 import AlbumView from "./AlbumView";
 import PhotoView from "./PhotoView";
@@ -38,13 +41,54 @@ const DashboardContent = ({
   openShareModal,
   isLoadingShared,
   sharedAlbums,
+  setUploadedFiles,
 }) => {
+  // Stato per il modale di eliminazione album
+  const [albumToDelete, setAlbumToDelete] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
+
+  // Funzione per aprire il modale di conferma eliminazione
+  const openDeleteAlbumModal = (album, e) => {
+    e.stopPropagation();
+    setAlbumToDelete(album);
+  };
+
+  // Funzione per chiudere il modale
+  const closeDeleteAlbumModal = () => {
+    setAlbumToDelete(null);
+    setDeleteError(null);
+  };
+
+  // Funzione per confermare l'eliminazione dell'album
+  const confirmDeleteAlbum = async () => {
+    if (!albumToDelete || !albumToDelete.id) return;
+
+    setDeleteLoading(true);
+    setDeleteError(null);
+
+    try {
+      // Chiamata alla funzione deleteAlbum passata come prop
+      await deleteAlbum(albumToDelete.id);
+
+      // Chiudi il modale dopo l'eliminazione
+      closeDeleteAlbumModal();
+    } catch (error) {
+      console.error("Errore nell'eliminazione dell'album:", error);
+      setDeleteError(
+        "Si è verificato un errore durante l'eliminazione dell'album"
+      );
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
   return (
-    <div className="flex-grow-1 overflow-auto p-4">
+    <div className="p-4 flex-grow-1  bg-light-custom">
       {!selectedAlbum && !selectedPhoto ? (
         <>
           <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2 className="display-4 mb-0">
+            <h2 className="display-4 mb-0 text-primary-custom">
               {activeTab === "albums" && "I miei Album"}
               {activeTab === "shared" && "Album condivisi con me"}
               {activeTab === "upload" && "Carica nuove foto"}
@@ -52,7 +96,7 @@ const DashboardContent = ({
             </h2>
             {activeTab === "albums" && (
               <button
-                className="btn-info1 border-1 btn bg-dashbord d-flex align-items-center"
+                className="btn-secondary-custom border-1 btn d-flex align-items-center"
                 onClick={() => setUploadModalOpen(true)}
               >
                 <Plus size={18} className="me-2" />
@@ -67,18 +111,20 @@ const DashboardContent = ({
               {noResults ? (
                 <div className="text-center mt-5 py-5">
                   <div
-                    className="rounded-circle bg-warning bg-opacity-10 d-flex align-items-center justify-content-center mx-auto mb-3"
+                    className="rounded-circle bg-secondary-light d-flex align-items-center justify-content-center mx-auto mb-3"
                     style={{ width: "64px", height: "64px" }}
                   >
-                    <Search size={32} className="text-warning" />
+                    <Search size={32} className="text-primary-custom" />
                   </div>
-                  <h3 className="h5 mb-2">Nessun album trovato</h3>
-                  <p className="text-muted col-md-6 mx-auto">
+                  <h3 className="h5 mb-2 text-primary-custom">
+                    Nessun album trovato
+                  </h3>
+                  <p className="text-muted-custom col-md-6 mx-auto">
                     La tua ricerca non ha prodotto risultati. Prova a utilizzare
                     termini diversi.
                   </p>
                   <button
-                    className="btn btn-outline-secondary mt-3"
+                    className="btn btn-outline-custom mt-3"
                     onClick={resetSearch}
                   >
                     Mostra tutti gli album
@@ -89,7 +135,7 @@ const DashboardContent = ({
                   {albums.map((album) => (
                     <div key={album.id} className="col-md-6 col-lg-4">
                       <div
-                        className="card bg-info1 h-100 shadow-sm rounded-4 border-black"
+                        className="card bg-white-custom h-100 shadow-sm rounded-4 border-custom"
                         style={{ cursor: "pointer" }}
                         onClick={() => setSelectedAlbum(album)}
                       >
@@ -98,7 +144,7 @@ const DashboardContent = ({
                             src={
                               album.photos && album.photos.length > 0
                                 ? album.photos[0].url
-                                : "/api/placeholder/300/200"
+                                : "https://i.pinimg.com/736x/2a/86/a5/2a86a560f0559704310d98fc32bd3d32.jpg"
                             }
                             alt={album.name || album.title}
                             className="card-img rounded-top-4 h-100 object-fit-cover"
@@ -109,8 +155,10 @@ const DashboardContent = ({
                           />
                         </div>
                         <div className="card-body">
-                          <h5 className="card-title">{album.name}</h5>
-                          <div className="d-flex justify-content-between small text-muted mb-2">
+                          <h5 className="card-title text-primary-custom">
+                            {album.name}
+                          </h5>
+                          <div className="d-flex justify-content-between small text-muted-custom mb-2">
                             <span>{album.photoCount} foto</span>
                             <div className="d-flex align-items-center">
                               <Share2 size={14} className="me-1" />
@@ -126,7 +174,7 @@ const DashboardContent = ({
                             <div className="d-flex align-items-center">
                               <MessageSquare
                                 size={14}
-                                className="me-1 text-primary"
+                                className="me-1 text-secondary-custom"
                               />
                               <span className="me-1"></span>
                               <span>{album.totalCommentCount || 0}</span>
@@ -134,17 +182,14 @@ const DashboardContent = ({
                           </div>
                           <div className="d-flex gap-2">
                             <button
-                              className="btn btn-delete btn-animated-album rounded-5 flex-grow-1 d-flex align-items-center justify-content-center"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                deleteAlbum(album.id);
-                              }}
+                              className="btn btn-delete-custom btn-animated-album rounded-5 flex-grow-1 d-flex align-items-center justify-content-center"
+                              onClick={(e) => openDeleteAlbumModal(album, e)}
                             >
                               <Trash size={16} className="me-2" />
                               <span>Elimina</span>
                             </button>
                             <button
-                              className="btn btn-info-1 btn-animated-album w-50 rounded-5 flex-grow-1 d-flex align-items-center justify-content-center"
+                              className="btn btn-secondary-custom btn-animated-album rounded-5 flex-grow-1 d-flex align-items-center justify-content-center"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 openShareModal(album);
@@ -160,19 +205,21 @@ const DashboardContent = ({
                   ))}
                   <div className="col-md-6 col-lg-4">
                     <div
-                      className="card h-100 border-dashed border-2 d-flex align-items-center justify-content-center p-4"
-                      style={{ borderStyle: "dashed", cursor: "pointer" }}
+                      className="card h-100 border-dashed-custom d-flex align-items-center justify-content-center p-4 bg-white-custom"
+                      style={{ cursor: "pointer" }}
                       onClick={() => setUploadModalOpen(true)}
                     >
                       <div className="text-center">
                         <div
-                          className="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center mx-auto mb-3"
+                          className="rounded-circle bg-secondary-light d-flex align-items-center justify-content-center mx-auto mb-3"
                           style={{ width: "64px", height: "64px" }}
                         >
-                          <Plus size={32} className="text-primary" />
+                          <Plus size={32} className="text-primary-custom" />
                         </div>
-                        <p className="mb-1 fw-medium">Crea nuovo album</p>
-                        <p className="text-muted small">
+                        <p className="mb-1 fw-medium text-primary-custom">
+                          Crea nuovo album
+                        </p>
+                        <p className="text-muted-custom small">
                           Aggiungi e condividi nuove foto
                         </p>
                       </div>
@@ -182,18 +229,20 @@ const DashboardContent = ({
               ) : (
                 <div className="text-center py-5">
                   <div
-                    className="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center mx-auto mb-3"
+                    className="rounded-circle bg-secondary-light d-flex align-items-center justify-content-center mx-auto mb-3"
                     style={{ width: "64px", height: "64px" }}
                   >
-                    <Image size={32} className="text-primary" />
+                    <Image size={32} className="text-primary-custom" />
                   </div>
-                  <h3 className="h5 mb-2">Nessun album creato</h3>
-                  <p className="text-muted col-md-6 mx-auto">
+                  <h3 className="h5 mb-2 text-primary-custom">
+                    Nessun album creato
+                  </h3>
+                  <p className="text-muted-custom col-md-6 mx-auto">
                     Non hai ancora creato album. Crea il tuo primo album per
                     iniziare a condividere le tue foto!
                   </p>
                   <button
-                    className="btn btn-primary mt-3"
+                    className="btn btn-primary-custom mt-3"
                     onClick={() => setUploadModalOpen(true)}
                   >
                     <Plus size={16} className="me-2" />
@@ -208,17 +257,22 @@ const DashboardContent = ({
             <>
               {isLoadingShared ? (
                 <div className="text-center py-5">
-                  <div className="spinner-border text-primary" role="status">
+                  <div
+                    className="spinner-border text-secondary-custom"
+                    role="status"
+                  >
                     <span className="visually-hidden">Caricamento...</span>
                   </div>
-                  <p className="mt-3">Caricamento album condivisi...</p>
+                  <p className="mt-3 text-primary-custom">
+                    Caricamento album condivisi...
+                  </p>
                 </div>
               ) : sharedAlbums.length > 0 ? (
                 <div className="row g-4">
                   {sharedAlbums.map((album) => (
                     <div key={album.id} className="col-md-6 col-lg-4">
                       <div
-                        className="card bg-info1 h-100 shadow-sm rounded-4 border-black"
+                        className="card bg-white-custom h-100 shadow-sm rounded-4 border-custom"
                         style={{ cursor: "pointer" }}
                         onClick={() => setSelectedAlbum(album)}
                       >
@@ -238,11 +292,13 @@ const DashboardContent = ({
                           />
                         </div>
                         <div className="card-body">
-                          <h5 className="card-title">{album.name}</h5>
-                          <p className="text-muted small">
+                          <h5 className="card-title text-primary-custom">
+                            {album.name}
+                          </h5>
+                          <p className="text-muted-custom small">
                             Condiviso da: {album.createdByUsername}
                           </p>
-                          <div className="d-flex justify-content-between small text-muted mb-2">
+                          <div className="d-flex justify-content-between small text-muted-custom mb-2">
                             <span>{album.photoCount} foto</span>
                           </div>
                           <div className="d-flex align-items-center gap-3 small mb-3">
@@ -253,7 +309,7 @@ const DashboardContent = ({
                             <div className="d-flex align-items-center">
                               <MessageSquare
                                 size={14}
-                                className="me-1 text-primary"
+                                className="me-1 text-secondary-custom"
                               />
                               <span>{album.totalCommentCount || 0}</span>
                             </div>
@@ -266,13 +322,15 @@ const DashboardContent = ({
               ) : (
                 <div className="text-center py-5">
                   <div
-                    className="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center mx-auto mb-3"
+                    className="rounded-circle bg-secondary-light d-flex align-items-center justify-content-center mx-auto mb-3"
                     style={{ width: "64px", height: "64px" }}
                   >
-                    <Share2 size={32} className="text-primary" />
+                    <Share2 size={32} className="text-primary-custom" />
                   </div>
-                  <h3 className="h5 mb-2">Nessun album condiviso</h3>
-                  <p className="text-muted col-md-6 mx-auto">
+                  <h3 className="h5 mb-2 text-primary-custom">
+                    Nessun album condiviso
+                  </h3>
+                  <p className="text-muted-custom col-md-6 mx-auto">
                     Al momento non ci sono album condivisi con te. Quando
                     qualcuno condividerà un album, apparirà qui.
                   </p>
@@ -282,11 +340,16 @@ const DashboardContent = ({
           )}
 
           {activeTab === "upload" && (
-            <div className="card shadow-sm">
+            <div className="card bg-white-custom shadow-sm border-custom">
               <div className="card-body">
                 <div className="d-flex align-items-center justify-content-between mb-4">
-                  <h3 className="h5 mb-0">Carica nuove foto</h3>
-                  <select className="form-select" style={{ width: "auto" }}>
+                  <h3 className="h5 mb-0 text-primary-custom">
+                    Carica nuove foto
+                  </h3>
+                  <select
+                    className="form-select border-custom"
+                    style={{ width: "auto" }}
+                  >
                     <option>Seleziona Album</option>
                     {albums.map((album) => (
                       <option key={album.id} value={album.id}>
@@ -297,16 +360,13 @@ const DashboardContent = ({
                   </select>
                 </div>
 
-                <div
-                  className="border border-2 rounded p-5 text-center"
-                  style={{ borderStyle: "dashed" }}
-                >
+                <div className="border-dashed-custom rounded p-5 text-center">
                   <div className="d-flex flex-column align-items-center">
-                    <Camera size={48} className="text-muted mb-3" />
-                    <p className="text-muted mb-2">
+                    <Camera size={48} className="text-secondary-custom mb-3" />
+                    <p className="text-muted-custom mb-2">
                       Trascina qui le tue foto o
                     </p>
-                    <label className="btn btn-primary">
+                    <label className="btn btn-secondary-custom">
                       Sfoglia file
                       <input
                         type="file"
@@ -316,7 +376,7 @@ const DashboardContent = ({
                         onChange={handleFileChange}
                       />
                     </label>
-                    <p className="text-muted small mt-2">
+                    <p className="text-muted-custom small mt-2">
                       Supporta JPG, PNG e GIF fino a 10MB
                     </p>
                   </div>
@@ -324,14 +384,14 @@ const DashboardContent = ({
 
                 {uploadedFiles.length > 0 && (
                   <div className="mt-4">
-                    <h4 className="h6 mb-3">
+                    <h4 className="h6 mb-3 text-primary-custom">
                       File selezionati ({uploadedFiles.length})
                     </h4>
                     <div className="d-flex flex-column gap-3">
                       {uploadedFiles.map((file, index) => (
                         <div
                           key={index}
-                          className="d-flex align-items-center bg-light p-3 rounded"
+                          className="d-flex align-items-center bg-light-custom p-3 rounded border-custom"
                         >
                           <div
                             className="me-3"
@@ -344,8 +404,12 @@ const DashboardContent = ({
                             />
                           </div>
                           <div className="flex-grow-1">
-                            <p className="mb-0 fw-medium">{file.name}</p>
-                            <p className="mb-0 small text-muted">{file.size}</p>
+                            <p className="mb-0 fw-medium text-primary-custom">
+                              {file.name}
+                            </p>
+                            <p className="mb-0 small text-muted-custom">
+                              {file.size}
+                            </p>
                           </div>
                           <button
                             className="btn btn-sm btn-light rounded-circle"
@@ -359,12 +423,14 @@ const DashboardContent = ({
 
                     <div className="mt-4 d-flex justify-content-end gap-2">
                       <button
-                        className="btn btn-outline-secondary"
+                        className="btn btn-outline-custom"
                         onClick={() => setUploadedFiles([])}
                       >
                         Annulla
                       </button>
-                      <button className="btn btn-primary">Carica foto</button>
+                      <button className="btn btn-primary-custom">
+                        Carica foto
+                      </button>
                     </div>
                   </div>
                 )}
@@ -400,6 +466,110 @@ const DashboardContent = ({
           refreshTrigger={refreshTrigger}
           deleteComment={deleteComment}
         />
+      )}
+
+      {/* Modale di conferma eliminazione album */}
+      {albumToDelete && (
+        <div
+          className="modal fade show d-block"
+          style={{ backgroundColor: "rgba(53, 34, 8, 0.5)" }}
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content bg-light-custom border-custom rounded-4">
+              <div className="modal-header bg-secondary-custom border-bottom border-custom rounded-top-4">
+                <h5 className="modal-title text-primary-custom">
+                  Conferma eliminazione album
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={closeDeleteAlbumModal}
+                  disabled={deleteLoading}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div className="d-flex align-items-center mb-3">
+                  <div className="me-3 text-danger">
+                    <AlertTriangle size={32} />
+                  </div>
+                  <div>
+                    <p className="mb-0 text-primary-custom">
+                      Sei sicuro di voler eliminare l'album{" "}
+                      <strong>{albumToDelete.name}</strong>?
+                    </p>
+                    <p className="small text-muted-custom mb-0">
+                      Questa azione eliminerà l'album e tutte le foto in esso
+                      contenute. Non può essere annullata.
+                    </p>
+                  </div>
+                </div>
+
+                {deleteError && (
+                  <div className="alert alert-danger mt-3" role="alert">
+                    {deleteError}
+                  </div>
+                )}
+
+                <div className="mt-3">
+                  <div
+                    className="rounded overflow-hidden"
+                    style={{ height: "150px" }}
+                  >
+                    <img
+                      src={
+                        albumToDelete.photos && albumToDelete.photos.length > 0
+                          ? albumToDelete.photos[0].url
+                          : "https://i.pinimg.com/736x/2a/86/a5/2a86a560f0559704310d98fc32bd3d32.jpg"
+                      }
+                      alt={albumToDelete.name || "Album da eliminare"}
+                      className="img-fluid w-100 h-100 object-fit-cover"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/api/placeholder/400/300";
+                      }}
+                    />
+                  </div>
+                  <div className="mt-2 d-flex justify-content-between align-items-center">
+                    <h6 className="text-primary-custom mb-0">
+                      {albumToDelete.name}
+                    </h6>
+                    <div className="small text-muted-custom">
+                      {albumToDelete.photoCount} foto
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer border-top border-custom">
+                <button
+                  type="button"
+                  className="btn btn-outline-custom"
+                  onClick={closeDeleteAlbumModal}
+                  disabled={deleteLoading}
+                >
+                  Annulla
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger d-flex align-items-center"
+                  onClick={confirmDeleteAlbum}
+                  disabled={deleteLoading}
+                >
+                  {deleteLoading ? (
+                    <>
+                      <Loader size={16} className="me-2 animate-spin" />
+                      <span>Eliminazione...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Trash size={16} className="me-2" />
+                      <span>Elimina album</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

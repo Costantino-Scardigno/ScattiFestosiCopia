@@ -86,12 +86,14 @@ const DashboardModal = ({
   return (
     <div
       className="modal fade show d-block"
-      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+      style={{ backgroundColor: "rgba(53, 34, 8, 0.5)" }}
     >
       <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Crea nuovo album</h5>
+        <div className="modal-content bg-light-custom">
+          <div className="modal-header bg-secondary-custom">
+            <h5 className="modal-title text-primary-custom">
+              Crea nuovo album
+            </h5>
             <button
               type="button"
               className="btn-close"
@@ -108,7 +110,9 @@ const DashboardModal = ({
             )}
 
             <div className="mb-3">
-              <label className="form-label">Nome dell'album</label>
+              <label className="form-label text-primary-custom">
+                Nome dell'album
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -120,7 +124,9 @@ const DashboardModal = ({
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Descrizione (opzionale)</label>
+              <label className="form-label text-primary-custom">
+                Descrizione (opzionale)
+              </label>
               <textarea
                 className="form-control"
                 placeholder="Aggiungi una descrizione"
@@ -132,15 +138,19 @@ const DashboardModal = ({
             </div>
 
             <div>
-              <label className="form-label">Seleziona foto</label>
+              <label className="form-label text-primary-custom">
+                Seleziona foto
+              </label>
               <div
-                className="border border-2 rounded p-4 text-center"
+                className="border border-2 rounded p-4 text-center border-custom"
                 style={{ borderStyle: "dashed" }}
               >
                 <div className="d-flex flex-column align-items-center">
-                  <Camera size={32} className="text-muted mb-2" />
-                  <p className="text-muted mb-2">Trascina qui le tue foto o</p>
-                  <label className="btn-animated-album btn btn-album btn-sm">
+                  <Camera size={32} className="text-secondary-custom mb-2" />
+                  <p className="text-muted-custom mb-2">
+                    Trascina qui le tue foto o
+                  </p>
+                  <label className="btn-animated-album btn btn-secondary-custom btn-sm">
                     Sfoglia file
                     <input
                       type="file"
@@ -158,7 +168,7 @@ const DashboardModal = ({
             {uploadedFiles.length > 0 && (
               <div className="mt-3">
                 <div className="d-flex justify-content-between align-items-center mb-2">
-                  <h6 className="mb-0">
+                  <h6 className="mb-0 text-primary-custom">
                     File selezionati ({uploadedFiles.length})
                   </h6>
                 </div>
@@ -192,7 +202,7 @@ const DashboardModal = ({
           <div className="modal-footer">
             <button
               type="button"
-              className="btn btn-outline-secondary"
+              className="btn btn-outline-custom"
               onClick={() => setUploadModalOpen(false)}
               disabled={loading}
             >
@@ -200,7 +210,7 @@ const DashboardModal = ({
             </button>
             <button
               type="button"
-              className=" btn-animated-album btn btn-info1  d-flex align-items-center"
+              className="btn-animated-album btn btn-secondary-custom d-flex align-items-center"
               onClick={createNewAlbum}
               disabled={!albumTitle.trim() || loading}
             >

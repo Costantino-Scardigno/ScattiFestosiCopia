@@ -2,10 +2,6 @@
   background-color: #f3f3e067;
 }
 
-.bg-form {
-  background-color: #fdfde1;
-}
-
 @keyframes overlay-in {
   0% {
     transform: scale(0, 0.003);
@@ -42,13 +38,6 @@
   animation: overlay-out 1s reverse both;
 }
 
-.btn-album {
-  background-color: #e7f11d;
-}
-.btn-album:hover {
-  background-color: #dc722b;
-}
-
 .btn-animated-album {
   position: relative;
   overflow: hidden;
@@ -76,6 +65,6 @@
   background-color: #d8eeef;
 }
 
-.text-accent {
-  color: #dc722bc0;
+.form-placeholder::placeholder {
+  text-align: center;
 }

@@ -138,12 +138,12 @@ const UploadPhotoModal = ({
   return (
     <div
       className="modal fade show d-block"
-      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+      style={{ backgroundColor: "rgba(53, 34, 8, 0.5)" }}
     >
-      <div className="modal-dialog modal-dialog-centered modal-lg">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content bg-light-custom">
+          <div className="modal-header bg-secondary-custom">
+            <h5 className="modal-title text-primary-custom">
               Carica foto in {selectedAlbum?.name || "album"}
             </h5>
             <button
@@ -162,13 +162,15 @@ const UploadPhotoModal = ({
             )}
 
             <div
-              className="border border-2 rounded p-4 text-center mb-4"
+              className="border border-2 rounded p-4 text-center mb-4 border-custom"
               style={{ borderStyle: "dashed" }}
             >
               <div className="d-flex flex-column align-items-center">
-                <Camera size={48} className="text-muted mb-3" />
-                <p className="text-muted mb-2">Trascina qui le tue foto o</p>
-                <label className="btn-animated-album btn btn-album">
+                <Camera size={48} className="text-secondary-custom mb-3" />
+                <p className="text-muted-custom mb-2">
+                  Trascina qui le tue foto o
+                </p>
+                <label className="btn-animated-album btn btn-secondary-custom">
                   Sfoglia file
                   <input
                     type="file"
@@ -179,7 +181,7 @@ const UploadPhotoModal = ({
                     disabled={uploading}
                   />
                 </label>
-                <p className="text-muted small mt-2">
+                <p className="text-muted-custom small mt-2">
                   Supporta JPG, PNG e GIF fino a 10MB
                 </p>
               </div>
@@ -187,7 +189,9 @@ const UploadPhotoModal = ({
 
             {files.length > 0 && (
               <div>
-                <h6 className="mb-3">File selezionati ({files.length})</h6>
+                <h6 className="mb-3 text-primary-custom">
+                  File selezionati ({files.length})
+                </h6>
                 <div className="row g-3">
                   {files.map((file, index) => (
                     <div key={index} className="col-md-3 col-sm-4 col-6">
@@ -207,12 +211,14 @@ const UploadPhotoModal = ({
                           <X size={14} />
                         </button>
                         <div
-                          className="small mt-1 text-truncate"
+                          className="small mt-1 text-truncate text-primary-custom"
                           style={{ maxWidth: "100%" }}
                         >
                           {file.name}
                         </div>
-                        <div className="small text-muted">{file.size}</div>
+                        <div className="small text-muted-custom">
+                          {file.size}
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -223,12 +229,17 @@ const UploadPhotoModal = ({
             {uploading && (
               <div className="mt-4">
                 <div className="d-flex align-items-center mb-2">
-                  <span className="me-2">Caricamento in corso...</span>
-                  <Loader size={16} className="animate-spin" />
+                  <span className="me-2 text-primary-custom">
+                    Caricamento in corso...
+                  </span>
+                  <Loader
+                    size={16}
+                    className="animate-spin text-secondary-custom"
+                  />
                 </div>
                 <div className="progress">
                   <div
-                    className="progress-bar"
+                    className="progress-bar bg-secondary-custom text-primary-custom"
                     role="progressbar"
                     style={{ width: `${uploadProgress}%` }}
                     aria-valuenow={uploadProgress}
@@ -245,7 +256,7 @@ const UploadPhotoModal = ({
           <div className="modal-footer">
             <button
               type="button"
-              className="btn btn-outline-secondary"
+              className="btn btn-outline-custom"
               onClick={handleClose}
               disabled={uploading}
             >
@@ -253,7 +264,7 @@ const UploadPhotoModal = ({
             </button>
             <button
               type="button"
-              className="btn-animated-album btn btn-info1 d-flex align-items-center"
+              className="btn-animated-album btn btn-secondary-custom d-flex align-items-center"
               onClick={uploadFiles}
               disabled={files.length === 0 || uploading}
             >
