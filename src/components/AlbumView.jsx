@@ -42,7 +42,7 @@ const AlbumView = ({
     setLoading(true);
 
     fetch(
-      `http://localhost:8080/api/events/${selectedAlbum.id}?includeDetails=true`,
+      `http://dominant-aubine-costantino-127b0ac1.koyeb.app/api/events/${selectedAlbum.id}?includeDetails=true`,
       {
         method: "GET",
         headers: {
@@ -91,7 +91,7 @@ const AlbumView = ({
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `http://localhost:8080/api/photos/${photoToDelete.id}`,
+        `http://dominant-aubine-costantino-127b0ac1.koyeb.app/api/photos/${photoToDelete.id}`,
         {
           method: "DELETE",
           headers: {

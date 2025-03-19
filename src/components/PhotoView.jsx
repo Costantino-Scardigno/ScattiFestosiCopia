@@ -48,7 +48,7 @@ const PhotoView = ({
     const token = localStorage.getItem("authToken");
 
     fetch(
-      `http://localhost:8080/api/photos/${selectedPhoto.id}?includeDetails=true`,
+      `http://dominant-aubine-costantino-127b0ac1.koyeb.app/api/photos/${selectedPhoto.id}?includeDetails=true`,
       {
         method: "GET",
         headers: {
@@ -89,12 +89,15 @@ const PhotoView = ({
   const checkLikeStatus = (photoId) => {
     const token = localStorage.getItem("authToken");
 
-    fetch(`http://localhost:8080/api/likes/photo/${photoId}/status`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    fetch(
+      `http://dominant-aubine-costantino-127b0ac1.koyeb.app/api/likes/photo/${photoId}/status`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Errore nel verificare lo stato del like");
@@ -180,13 +183,16 @@ const PhotoView = ({
       // Recupera il token dal localStorage
       const token = localStorage.getItem("authToken");
 
-      fetch(`http://localhost:8080/api/comments/${commentId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      fetch(
+        `http://dominant-aubine-costantino-127b0ac1.koyeb.app/api/comments/${commentId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
         .then((response) => {
           if (!response.ok) {
             throw new Error("Errore nell'eliminazione del commento");
