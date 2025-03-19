@@ -52,7 +52,7 @@ const Dashboard = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/events/${albumId}`,
+        `https://scattifestosi.netlify.app/api/events/${albumId}`,
         {
           method: "DELETE",
           headers: {
