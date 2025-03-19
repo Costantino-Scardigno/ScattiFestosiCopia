@@ -53,7 +53,7 @@ function Form({ show, onClose }) {
 
     try {
       const response = await fetch(
-        "https://scattifestosi.netlify.app/api/auth/signin",
+        "https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/auth/signin",
         {
           method: "POST",
           headers: {
@@ -145,13 +145,16 @@ function Form({ show, onClose }) {
     try {
       console.log("Invio dati registrazione:", newUser);
 
-      const response = await fetch("http://localhost:8080/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newUser),
-      });
+      const response = await fetch(
+        "https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/auth/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newUser),
+        }
+      );
 
       // Gestione della risposta per evitare errori JSON
       const contentType = response.headers.get("content-type");

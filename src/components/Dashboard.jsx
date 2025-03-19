@@ -52,7 +52,7 @@ const Dashboard = () => {
 
     try {
       const response = await fetch(
-        `https://scattifestosi.netlify.app/api/events/${albumId}`,
+        `https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/events/${albumId}`,
         {
           method: "DELETE",
           headers: {
@@ -128,13 +128,16 @@ const Dashboard = () => {
   const fetchAllAlbums = () => {
     const token = localStorage.getItem("authToken");
 
-    fetch("http://localhost:8080/api/events?includeDetails=true", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    fetch(
+      "https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/events?includeDetails=true",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Errore nella richiesta!");
@@ -156,13 +159,16 @@ const Dashboard = () => {
     setIsLoadingShared(true);
     const token = localStorage.getItem("authToken");
 
-    fetch("http://localhost:8080/api/events/shared?includeDetails=true", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    fetch(
+      "https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/events/shared?includeDetails=true",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error("Errore nel recupero degli album condivisi!");
@@ -225,7 +231,7 @@ const Dashboard = () => {
     try {
       // Verifica se la foto è già piaciuta per determinare l'azione da eseguire
       const checkResponse = await fetch(
-        `http://localhost:8080/api/likes/photo/${photoId}/status`,
+        `https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/likes/photo/${photoId}/status`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -243,8 +249,8 @@ const Dashboard = () => {
       // Esegue l'azione (like o unlike)
       const response = await fetch(
         isLiked
-          ? `http://localhost:8080/api/likes/photo/${photoId}`
-          : `http://localhost:8080/api/likes`,
+          ? `https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/likes/photo/${photoId}`
+          : `https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/likes`,
         {
           method: isLiked ? "DELETE" : "POST",
           headers: {
@@ -272,17 +278,20 @@ const Dashboard = () => {
     if (!token) return;
 
     try {
-      const response = await fetch("http://localhost:8080/api/comments", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          content: commentText,
-          photoId: photoId,
-        }),
-      });
+      const response = await fetch(
+        "https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/comments",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            content: commentText,
+            photoId: photoId,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Errore nell'aggiunta del commento");
@@ -304,7 +313,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("authToken");
 
       const response = await fetch(
-        `http://localhost:8080/api/events/${albumId}?includeDetails=true`,
+        `https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/events/${albumId}?includeDetails=true`,
         {
           method: "GET",
           headers: {
