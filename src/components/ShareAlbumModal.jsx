@@ -30,7 +30,7 @@ const ShareAlbumModal = ({
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `http://dominant-aubine-costantino-127b0ac1.koyeb.app/api/events/${selectedAlbum.id}/share`,
+        `https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/events/${selectedAlbum.id}/share`,
         {
           method: "POST",
           headers: {

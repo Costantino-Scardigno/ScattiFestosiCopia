@@ -60,7 +60,7 @@ const UploadPhotoModal = ({
           formData.append("eventId", selectedAlbum.id);
 
           const response = await fetch(
-            "http://dominant-aubine-costantino-127b0ac1.koyeb.app/api/photos/upload",
+            "https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/photos/upload",
             {
               method: "POST",
               headers: {

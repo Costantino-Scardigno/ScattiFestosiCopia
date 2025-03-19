@@ -19,7 +19,7 @@ const SharedAlbumView = () => {
 
     try {
       const response = await fetch(
-        `http://dominant-aubine-costantino-127b0ac1.koyeb.app/api/events/share/${shareCode}`,
+        `https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/events/share/${shareCode}`,
         {
           method: "GET",
           headers: {
