@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import DashboardHeader from "./DashboardHeader";
 import DashboardContent from "./DashboardContent";
@@ -21,6 +22,7 @@ const Dashboard = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [noResults, setNoResults] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const location = useLocation();
 
   // Stati per la condivisione
   const [shareModalOpen, setShareModalOpen] = useState(false);
@@ -32,6 +34,13 @@ const Dashboard = () => {
 
   // Stato per la foto selezionata
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+
+  // Verifica se c'è un parametro per attivare la tab "shared"
+  useEffect(() => {
+    if (location.state?.activeTab) {
+      setActiveTab(location.state.activeTab);
+    }
+  }, [location]);
 
   // Funzione per aprire il modale di condivisione
   const openShareModal = (album) => {

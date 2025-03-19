@@ -4,13 +4,9 @@ import Navbar from "react-bootstrap/Navbar";
 import "../components/Navbar.css";
 import { Button } from "react-bootstrap";
 import { GoArrowDownRight } from "react-icons/go";
+import { Link } from "react-router-dom";
 
-import { useState } from "react";
-import Form from "./Form";
-import { Link, NavLink } from "react-router-dom";
-
-function MyNavbar() {
-  const [showModal, setShowModal] = useState(false);
+function MyNavbar({ setShowForm }) {
   return (
     <Navbar
       expand="lg"
@@ -26,7 +22,6 @@ function MyNavbar() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link
-              to
               className="fs-4 btn-animated text-primary-custom"
               href="#how"
             >
@@ -46,14 +41,14 @@ function MyNavbar() {
             </Nav.Link>
           </Nav>
           <Button
-            onClick={() => setShowModal(true)}
+            onClick={() => setShowForm(true)}
             className="btn-animated fs-5 text-primary-custom"
             variant=""
           >
             Login
           </Button>
           <Button
-            onClick={() => setShowModal(true)}
+            onClick={() => setShowForm(true)}
             className="btn-sign rounded-pill border-custom bg-secondary-custom text-primary-custom"
             variant=""
             size="lg"
@@ -61,7 +56,6 @@ function MyNavbar() {
             Registrati
             <GoArrowDownRight className="react-icon" />
           </Button>
-          <Form show={showModal} onClose={() => setShowModal(false)} />
         </Navbar.Collapse>
       </Container>
     </Navbar>

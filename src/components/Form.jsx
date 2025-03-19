@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Form.css";
 import { Link, useNavigate } from "react-router-dom";
 import "./Form.css";
@@ -24,6 +24,13 @@ function Form({ show, onClose }) {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
 
+  useEffect(() => {
+    // Se c'è un pendingShareCode, mostra il form di login preferibilmente
+    if (localStorage.getItem("pendingShareCode")) {
+      setActiveForm("login");
+    }
+  }, [show]);
+
   const handleClose = () => {
     const modale = document.getElementById("modale");
     const modaleBackDrop = document.getElementById("modale-backdrop");
@@ -38,6 +45,23 @@ function Form({ show, onClose }) {
     } else {
       onClose();
     }
+  };
+
+  // Funzione per gestire il reindirizzamento dopo il login
+  const handlePostLoginRedirect = () => {
+    const pendingShareCode = localStorage.getItem("pendingShareCode");
+
+    if (pendingShareCode) {
+      // Se c'è un codice di condivisione in attesa, reindirizza alla pagina dell'album
+      navigate(`/share/${pendingShareCode}`);
+      // Rimuovi il codice di condivisione pendente
+      localStorage.removeItem("pendingShareCode");
+    } else {
+      // Altrimenti, vai alla dashboard
+      navigate("/dashboard");
+    }
+
+    handleClose();
   };
 
   // Funzione per eseguire il login (fetch)
@@ -98,8 +122,8 @@ function Form({ show, onClose }) {
       localStorage.setItem("authToken", data.token);
       console.log("Login avvenuto con successo:", data);
 
-      handleClose();
-      navigate("/dashboard");
+      // Reindirizza l'utente dopo il login
+      handlePostLoginRedirect();
     } catch (error) {
       console.error("Errore login:", error);
       setLoginError(error.message || "Username o password non validi");
@@ -247,7 +271,7 @@ function Form({ show, onClose }) {
                 aria-label="Chiudi"
               ></button>
             </div>
-            <div className="modal-body  d-flex justify-content-evenly rounded-bottom-5">
+            <div className="modal-body d-flex justify-content-evenly rounded-bottom-5">
               {/* Contenitore slider */}
               <div style={{ overflow: "hidden" }}>
                 <div
@@ -323,7 +347,7 @@ function Form({ show, onClose }) {
                       <div className="d-flex justify-content-center">
                         <button
                           type="submit"
-                          className="btn-animated-album btn btn-secondary-custom w-50  mt-3"
+                          className="btn-animated-album btn btn-secondary-custom w-50 mt-3"
                           disabled={isRegistering}
                         >
                           {isRegistering ? (
@@ -372,6 +396,21 @@ function Form({ show, onClose }) {
                           {loginError}
                         </div>
                       )}
+
+                      {/* Mostra un messaggio se c'è un album condiviso in attesa */}
+                      {localStorage.getItem("pendingShareCode") && (
+                        <div className="alert alert-info mb-3" role="alert">
+                          <p className="mb-1 fw-bold">
+                            Accedi per visualizzare l'album condiviso
+                          </p>
+                          <small>
+                            Per accedere all'album condiviso, effettua il login
+                            o registrati. L'album apparirà automaticamente nei
+                            tuoi album condivisi.
+                          </small>
+                        </div>
+                      )}
+
                       <div className="d-flex flex-column mb-4">
                         <label
                           htmlFor="usernameLogin"
@@ -409,7 +448,7 @@ function Form({ show, onClose }) {
                       <div className="d-flex justify-content-center">
                         <button
                           type="submit"
-                          className="btn-animated-album btn btn-secondary-custom w-50  mt-3"
+                          className="btn-animated-album btn btn-secondary-custom w-50 mt-3"
                           disabled={isLoggingIn}
                         >
                           {isLoggingIn ? (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Image, Heart, MessageSquare } from "lucide-react";
 
 const SharedAlbumView = () => {
@@ -8,10 +8,22 @@ const SharedAlbumView = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // Verifica se l'utente è autenticato
+    const authToken = localStorage.getItem("authToken");
+
+    if (!authToken) {
+      // Se non è autenticato, salva il codice di condivisione e reindirizza alla home
+      localStorage.setItem("pendingShareCode", shareCode);
+      navigate("/", { state: { openLoginForm: true } });
+      return;
+    }
+
+    // Se l'utente è autenticato, procedi a caricare l'album condiviso
     fetchSharedAlbum();
-  }, [shareCode]);
+  }, [shareCode, navigate]);
 
   const fetchSharedAlbum = async () => {
     setIsLoading(true);
@@ -24,6 +36,7 @@ const SharedAlbumView = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Aggiungi token per l'autenticazione
           },
         }
       );
@@ -31,17 +44,57 @@ const SharedAlbumView = () => {
       if (!response.ok) {
         if (response.status === 404) {
           throw new Error("Album non trovato");
+        } else if (response.status === 401) {
+          // Se non autorizzato, reindirizza al login
+          localStorage.setItem("pendingShareCode", shareCode);
+          navigate("/", { state: { openLoginForm: true } });
+          return;
         }
         throw new Error("Errore nel recupero dell'album");
       }
 
       const data = await response.json();
       setAlbum(data);
+
+      // Aggiungi automaticamente l'album agli album condivisi dell'utente se necessario
+      saveSharedAlbumToUser(data.id);
     } catch (error) {
       console.error("Errore:", error);
       setError(error.message || "Si è verificato un errore");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Funzione per salvare l'album condiviso all'utente corrente
+  const saveSharedAlbumToUser = async (albumId) => {
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken || !albumId) return;
+
+    try {
+      const response = await fetch(
+        "https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/events/accept-share",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify({
+            eventId: albumId,
+            shareCode: shareCode,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        console.error("Errore nel salvare l'album condiviso");
+        return;
+      }
+
+      console.log("Album condiviso salvato con successo");
+    } catch (error) {
+      console.error("Errore nel salvare l'album condiviso:", error);
     }
   };
 
@@ -52,6 +105,11 @@ const SharedAlbumView = () => {
 
   const closePhoto = () => {
     setSelectedPhoto(null);
+  };
+
+  // Funzione per andare alla dashboard con la tab degli album condivisi selezionata
+  const goToDashboardShared = () => {
+    navigate("/dashboard", { state: { activeTab: "shared" } });
   };
 
   if (isLoading) {
@@ -102,21 +160,21 @@ const SharedAlbumView = () => {
   }
 
   return (
-    <div className="container-fluid py-4">
-      <div className="row mb-4">
-        <div className="col">
-          <Link to="/" className="text-decoration-none">
-            <div className="d-flex align-items-center">
-              <ArrowLeft size={20} className="me-2" />
-              <span>Torna alla home</span>
-            </div>
-          </Link>
+    <div className="container py-3">
+      <div className="d-flex justify-content-center align-items-center my-5">
+        <div className="col-auto">
+          <button
+            className="btn btn-secondary-custom d-flex align-items-center"
+            onClick={goToDashboardShared}
+          >
+            <span>Vai ai tuoi album condivisi</span>
+          </button>
         </div>
       </div>
 
       <div className="row mb-4">
         <div className="col">
-          <h1 className="display-4">{album.name}</h1>
+          <h1 className="display-4 "> {album.name}</h1>
           {album.description && <p className="lead">{album.description}</p>}
           <div className="d-flex align-items-center text-muted small">
             <span>{album.photoCount || album.photos.length} foto</span>
@@ -196,7 +254,7 @@ const SharedAlbumView = () => {
             className="modal-dialog modal-dialog-centered modal-xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="modal-content border-0 bg-transparent">
+            <div className="modal-content modal-dialog  modal-dialog-center border-0 bg-transparent">
               <div className="modal-body p-0 text-center">
                 <img
                   src={selectedPhoto.url}
@@ -204,32 +262,6 @@ const SharedAlbumView = () => {
                   alt={selectedPhoto.caption || "Photo view"}
                   style={{ maxHeight: "80vh" }}
                 />
-              </div>
-              <div className="modal-footer bg-white rounded-bottom">
-                <div className="container-fluid">
-                  <div className="row align-items-center">
-                    <div className="col">
-                      {selectedPhoto.caption && (
-                        <p className="mb-0">{selectedPhoto.caption}</p>
-                      )}
-                    </div>
-                    <div className="col-auto">
-                      <div className="d-flex align-items-center">
-                        <div className="d-flex align-items-center me-3">
-                          <Heart size={18} className="text-danger me-1" />
-                          <span>{selectedPhoto.likeCount || 0}</span>
-                        </div>
-                        <div className="d-flex align-items-center">
-                          <MessageSquare
-                            size={18}
-                            className="text-primary me-1"
-                          />
-                          <span>{selectedPhoto.commentCount || 0}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

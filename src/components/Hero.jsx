@@ -1,11 +1,8 @@
 import { useState } from "react";
 import "../components/Hero.css";
-import Form from "./Form";
-import { href, Link, Links } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-function MyHero() {
-  const [showModal, setShowModal] = useState(false);
-
+function MyHero({ setShowForm }) {
   const handleClick = () => {
     const element = document.getElementById("how");
     element.scrollIntoView({ behavior: "smooth" });
@@ -40,13 +37,11 @@ function MyHero() {
             <div className="col-sm-6 mt-4 ">
               {/* Bottone "Crea Album" */}
               <button
-                onClick={() => setShowModal(true)}
-                className="btn btn-animated-album btn-secondary-custom w-100 py-3  rounded-pill fs-4 fw-bold"
+                onClick={() => setShowForm(true)}
+                className="btn btn-animated-album btn-secondary-custom w-100 py-3 rounded-pill fs-4 fw-bold"
               >
                 Crea Album
               </button>
-
-              <Form show={showModal} onClose={() => setShowModal(false)} />
             </div>
           </div>
         </div>
