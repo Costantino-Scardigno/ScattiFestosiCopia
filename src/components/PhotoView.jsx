@@ -48,7 +48,7 @@ const PhotoView = ({
     const token = localStorage.getItem("authToken");
 
     fetch(
-      `http://dominant-aubine-costantino-127b0ac1.koyeb.app/api/photos/${selectedPhoto.id}?includeDetails=true`,
+      `https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/photos/${selectedPhoto.id}?includeDetails=true`,
       {
         method: "GET",
         headers: {
@@ -90,7 +90,7 @@ const PhotoView = ({
     const token = localStorage.getItem("authToken");
 
     fetch(
-      `http://dominant-aubine-costantino-127b0ac1.koyeb.app/api/likes/photo/${photoId}/status`,
+      `https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/likes/photo/${photoId}/status`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -184,7 +184,7 @@ const PhotoView = ({
       const token = localStorage.getItem("authToken");
 
       fetch(
-        `http://dominant-aubine-costantino-127b0ac1.koyeb.app/api/comments/${commentId}`,
+        `https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/comments/${commentId}`,
         {
           method: "DELETE",
           headers: {
