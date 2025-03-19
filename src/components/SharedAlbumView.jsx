@@ -250,5 +250,3 @@ const SharedAlbumView = () => {
     </div>
   );
 };
-
-export default SharedAlbumView;
