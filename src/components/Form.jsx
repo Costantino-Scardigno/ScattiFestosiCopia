@@ -53,7 +53,8 @@ function Form({ show, onClose }) {
 
     if (pendingShareCode) {
       // Se c'è un codice di condivisione in attesa, reindirizza alla pagina dell'album
-      navigate(`/share/${pendingShareCode}`);
+      // Usa il percorso corretto "/album/share/" invece di "/share/"
+      navigate(`/album/share/${pendingShareCode}`);
       // Rimuovi il codice di condivisione pendente
       localStorage.removeItem("pendingShareCode");
     } else {
