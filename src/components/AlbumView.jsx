@@ -161,19 +161,19 @@ const AlbumView = ({
       </div>
       <div className="d-flex flex-column flex-sm-row justify-content-between  align-items-center mb-4">
         <div className="d-flex align-items-center gap-3 small text-muted-custom mb-4 mb-sm-0 mb-md-0 mb-lg-0">
-          <div className="d-flex align-items-center">
+          <div className="d-flex flex-shrink-0 flex-column flex-sm-row align-items-center me-2">
             <Image size={16} className="me-1" />
             <span>{eventData.photoCount || 0} foto</span>
           </div>
-          <div className="d-flex align-items-center">
+          <div className="d-flex d-none-custom flex-shrink-0 flex-column flex-sm-row align-items-center me-2">
             <Share2 size={16} className="me-1" />
             <span>Condiviso con 0</span>
           </div>
-          <div className="d-flex align-items-center">
+          <div className="d-flex  flex-column flex-sm-row align-items-center me-2">
             <Heart size={16} className="me-1 text-danger" />
             <span>{eventData.totalLikeCount}</span>
           </div>
-          <div className="d-flex align-items-center">
+          <div className="d-flex flex-shrink-0 flex-column flex-sm-row align-items-center ">
             <MessageSquare size={16} className="me-1 text-secondary-custom" />
             <span>{eventData.totalCommentCount || 0} commenti</span>
           </div>

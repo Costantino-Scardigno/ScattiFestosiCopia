@@ -211,3 +211,10 @@ h6,
 .font-effect {
   color: var(--primary-color);
 }
+
+/* Display none custom */
+@media (max-width: 343px) {
+  .d-none-custom {
+    display: none !important;
+  }
+}

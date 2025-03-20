@@ -14,7 +14,7 @@ const DashboardSideBar = ({
   };
 
   return (
-    <div className="bg-dashboard shadow-sm p-3 pt-4 border-bottom border-top ">
+    <div className="bg-dashboard  p-3 pt-4 border-bottom border-top ">
       <div className="d-lg-flex d-md-flex d-sm-flex-column align-items-center gap-4">
         <button
           className={`border-1 text-start d-flex align-items-center justify-content-center mb-2 py-2 rounded-5 bg-review w-100 ${

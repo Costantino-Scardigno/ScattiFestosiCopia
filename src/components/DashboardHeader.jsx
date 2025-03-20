@@ -2,6 +2,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, User, LogOut } from "lucide-react";
+import { Button, InputGroup } from "react-bootstrap";
 
 const DashboardHeader = ({ onSearch, searchQuery, setSearchQuery }) => {
   const [showDropdown, setShowDropdown] = React.useState(false);
@@ -34,30 +35,25 @@ const DashboardHeader = ({ onSearch, searchQuery, setSearchQuery }) => {
 
   return (
     <nav className="px-0 py-2 bg-dashboard">
-      <div className="d-flex justify-content-between align-items-center">
+      <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center">
         <Link className="text-decoration-none fs-2 text-primary-custom" to="/">
           ScattiFestosi
         </Link>
-        <div className="d-flex align-items-center">
-          <div className="position-relative me-3">
+        <div className="d-flex align-items-center my-3">
+          <div className="me-3">
             <form onSubmit={handleSearchSubmit}>
-              <input
-                type="text"
-                placeholder="Cerca album o foto..."
-                className="form-control ps-4"
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-              <span
-                className="position-absolute"
-                style={{
-                  left: "5px",
-                  top: "49%",
-                  transform: "translateY(-50%)",
-                }}
-              >
-                <Search className="text-muted-custom" size={18} />
-              </span>
+              <InputGroup className="d-flex align-items-center">
+                <Button variant="outline-daek" className="btn-primary-custom">
+                  <Search className="text-muted-custom " size={18} />
+                </Button>
+                <input
+                  type="text"
+                  placeholder="Cerca album o foto..."
+                  className="form-control ps-4"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                />
+              </InputGroup>
             </form>
           </div>
           <div className="position-relative">

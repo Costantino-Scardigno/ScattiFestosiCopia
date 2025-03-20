@@ -182,7 +182,7 @@ const UploadPhotoModal = ({
                   />
                 </label>
                 <p className="text-muted-custom small mt-2">
-                  Supporta JPG, PNG e GIF fino a 10MB
+                  Supporta JPG, PNG e GIF fino a 1000MB
                 </p>
               </div>
             </div>

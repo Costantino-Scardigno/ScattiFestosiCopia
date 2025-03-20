@@ -8,6 +8,7 @@ import ShareAlbumModal from "./ShareAlbumModal";
 import "./Dashboard.css";
 import DashboardModal from "./DashboardModal";
 import DashboardSideBar from "./DashboardSideBar.jsx";
+import DashboardFolders from "./DashboardFolders.jsx";
 
 const Dashboard = () => {
   // Stati principali
@@ -372,7 +373,7 @@ const Dashboard = () => {
         setSearchQuery={setSearchQuery}
       />
       <div className="row">
-        <DashboardSideBar
+        <DashboardFolders
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           setSelectedAlbum={setSelectedAlbum}

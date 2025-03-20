@@ -287,8 +287,8 @@ const PhotoView = ({
       : 0;
 
   return (
-    <div className="card shadow-sm border-custom">
-      <div className="card-header bg-dashboard d-flex align-items-center">
+    <div className="card shadow-sm border-custom rounded-top-5">
+      <div className="card-header  rounded-top-5 bg-dashboard d-flex align-items-center  ">
         <button
           className="bg-dashboard border-0 rounded-circle me-2"
           onClick={() => setSelectedPhoto(null)}
@@ -301,7 +301,7 @@ const PhotoView = ({
       </div>
 
       <div className="row g-0">
-        <div className="col-md-8 bg-dashboard">
+        <div className="col-md-8  bg-dashboard">
           <div className="bg-dark text-center">
             <img
               src={photo.url}
@@ -314,7 +314,7 @@ const PhotoView = ({
               }}
             />
           </div>
-          <div className="bg-dashboard border-top border-bottom p-3">
+          <div className="bg-dashboard  p-3 ">
             <div className="d-flex justify-content-between align-items-center">
               <div className="d-flex align-items-center gap-3">
                 <button
@@ -351,11 +351,11 @@ const PhotoView = ({
         </div>
 
         <div
-          className="col-md-4 bg-dashboard border-start d-flex flex-column"
+          className="col-md-4 bg-dashboard  d-flex flex-column"
           style={{ minHeight: "300px" }}
         >
           <div
-            className="flex-grow-1 overflow-auto p-3"
+            className="flex-grow-1  overflow-auto p-3 "
             ref={commentsContainerRef}
             style={{ maxHeight: "568px" }}
           >
@@ -369,9 +369,9 @@ const PhotoView = ({
                 {displayedComments.map((comment) => (
                   <div
                     key={comment.id}
-                    className="d-flex justify-content-between align-items-start"
+                    className="d-flex justify-content-between align-items-start border-start border-bottom border-top border-end p-3 rounded-5 shadow-sm"
                   >
-                    <div className="d-flex">
+                    <div className="d-flex ">
                       <div
                         className="rounded-circle bg-secondary-custom d-flex align-items-center justify-content-center me-2"
                         style={{ width: "32px", height: "32px" }}
@@ -421,8 +421,8 @@ const PhotoView = ({
             )}
           </div>
 
-          <div className="p-3 border-top">
-            <div className="d-flex">
+          <div className="p-3  mt-4  border-top ">
+            <div className="d-flex align-items-center ">
               <div
                 className="rounded-circle bg-secondary-custom d-flex align-items-center justify-content-center me-2"
                 style={{ width: "32px", height: "32px" }}

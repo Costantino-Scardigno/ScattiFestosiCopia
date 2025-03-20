@@ -1,6 +1,4 @@
-import { useState } from "react";
 import "../components/Hero.css";
-import { Link } from "react-router-dom";
 
 function MyHero({ setShowForm }) {
   const handleClick = () => {

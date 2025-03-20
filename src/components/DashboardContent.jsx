@@ -48,6 +48,9 @@ const DashboardContent = ({
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
 
+  // Stato per il caricamento della foto
+  const [uploadLoading, setUploadLoading] = useState(false);
+
   // Funzione per aprire il modale di conferma eliminazione
   const openDeleteAlbumModal = (album, e) => {
     e.stopPropagation();
@@ -83,11 +86,89 @@ const DashboardContent = ({
     }
   };
 
+  const handleUploadPhotos = async () => {
+    // Verifica se sono stati selezionati file
+    if (uploadedFiles.length === 0) {
+      alert("Seleziona almeno un file da caricare");
+      return;
+    }
+
+    // Ottieni l'ID dell'album selezionato dal dropdown
+    const albumSelectElement = document.querySelector("select.form-select");
+    const selectedAlbumId = albumSelectElement.value;
+
+    if (!selectedAlbumId || selectedAlbumId === "Seleziona Album") {
+      alert("Seleziona un album in cui caricare le foto");
+      return;
+    }
+
+    // Imposta lo stato di caricamento
+    setUploadLoading(true);
+
+    try {
+      // Recupera il token dal localStorage
+      const token = localStorage.getItem("authToken");
+
+      if (!token) {
+        throw new Error(
+          "Token di autenticazione non trovato. Effettua nuovamente il login."
+        );
+      }
+
+      // Carica ogni file individualmente
+      const uploadPromises = uploadedFiles.map(async (fileObj) => {
+        const formData = new FormData();
+        // Usa 'file' come nome del parametro invece di 'photos' (come richiesto dal backend)
+        formData.append("file", fileObj.file);
+        // Usa 'eventId' come nome del parametro invece di 'albumId' (come richiesto dal backend)
+        formData.append("eventId", selectedAlbumId);
+
+        const response = await fetch(
+          "https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/photos/upload",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(
+            errorData.message || "Errore durante il caricamento della foto"
+          );
+        }
+
+        return await response.json();
+      });
+
+      // Attendi che tutte le foto siano caricate
+      await Promise.all(uploadPromises);
+
+      // Resetta la lista dei file dopo l'upload
+      setUploadedFiles([]);
+
+      // Mostra un messaggio di successo
+      alert("Foto caricate con successo!");
+    } catch (error) {
+      console.error("Errore durante il caricamento delle foto:", error);
+      alert(
+        error.message ||
+          "Si è verificato un errore durante il caricamento delle foto"
+      );
+    } finally {
+      // Reimposta lo stato del bottone
+      setUploadLoading(false);
+    }
+  };
+
   return (
     <div className="p-4 flex-grow-1  bg-light-custom">
       {!selectedAlbum && !selectedPhoto ? (
         <>
-          <div className="d-flex justify-content-between align-items-center mb-4">
+          <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4">
             <h2 className="display-4 mb-0 text-primary-custom">
               {activeTab === "albums" && "I miei Album"}
               {activeTab === "shared" && "Album condivisi con me"}
@@ -96,7 +177,7 @@ const DashboardContent = ({
             </h2>
             {activeTab === "albums" && (
               <button
-                className="btn-secondary-custom border-1 btn d-flex align-items-center"
+                className="btn-secondary-custom border-1 btn d-flex align-items-center mt-3 mt-sm-0"
                 onClick={() => setUploadModalOpen(true)}
               >
                 <Plus size={18} className="me-2" />
@@ -353,10 +434,9 @@ const DashboardContent = ({
                     <option>Seleziona Album</option>
                     {albums.map((album) => (
                       <option key={album.id} value={album.id}>
-                        {album.title}
+                        {album.name}
                       </option>
                     ))}
-                    <option value="new">Nuovo Album</option>
                   </select>
                 </div>
 
@@ -377,7 +457,7 @@ const DashboardContent = ({
                       />
                     </label>
                     <p className="text-muted-custom small mt-2">
-                      Supporta JPG, PNG e GIF fino a 10MB
+                      Supporta JPG, PNG e GIF fino a 1000MB
                     </p>
                   </div>
                 </div>
@@ -428,8 +508,19 @@ const DashboardContent = ({
                       >
                         Annulla
                       </button>
-                      <button className="btn btn-primary-custom">
-                        Carica foto
+                      <button
+                        className="btn btn-primary-custom d-flex align-items-center"
+                        onClick={handleUploadPhotos}
+                        disabled={uploadLoading}
+                      >
+                        {uploadLoading ? (
+                          <>
+                            <Loader size={16} className="me-2 animate-spin" />
+                            <span>Caricamento...</span>
+                          </>
+                        ) : (
+                          <span>Carica foto</span>
+                        )}
                       </button>
                     </div>
                   </div>
