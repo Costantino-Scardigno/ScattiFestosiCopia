@@ -36,6 +36,7 @@ const PhotoView = ({
 
   // Ref per il contenitore dei commenti
   const commentsContainerRef = useRef(null);
+  const FormCommentRef = useRef(null);
 
   // Effetto per caricare i dettagli della foto
   useEffect(() => {
@@ -136,6 +137,11 @@ const PhotoView = ({
     setCurrentPage(nextPage);
     setHasMoreComments(endIndex < allComments.length);
     setLoadingMoreComments(false);
+  };
+
+  //Scroll al Form per commentare
+  const handleClickCommentButton = () => {
+    FormCommentRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   // Evento scroll
@@ -330,7 +336,10 @@ const PhotoView = ({
                   />
                   <span>{likesCount} mi piace</span>
                 </button>
-                <button className="btn btn-sm text-muted-custom d-flex align-items-center d-flex flex-column flex-md-row">
+                <button
+                  onClick={handleClickCommentButton}
+                  className="btn btn-sm text-muted-custom d-flex align-items-center d-flex flex-column flex-md-row"
+                >
                   <MessageSquare
                     className="me-1 text-secondary-custom"
                     size={18}
@@ -339,7 +348,7 @@ const PhotoView = ({
                 </button>
               </div>
               <div className="d-flex align-items-center gap-2">
-                <small className="text-muted-custom">
+                <small className="d-none d-sm-inline text-muted-custom">
                   {formatDate(photo.timestamp)}
                 </small>
                 <button className="btn btn-sm text-muted-custom">
@@ -429,7 +438,7 @@ const PhotoView = ({
               >
                 <User size={16} className="text-primary-custom" />
               </div>
-              <div className="input-group">
+              <div ref={FormCommentRef} className="input-group">
                 <input
                   type="text"
                   placeholder="Aggiungi un commento..."
