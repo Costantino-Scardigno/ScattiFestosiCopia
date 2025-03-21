@@ -8,9 +8,8 @@ import {
   Loader,
   ArrowLeft,
   Trash2,
-  X,
-  AlertTriangle,
 } from "lucide-react";
+import DeletePhotoModal from "./DeletePhotoModal";
 
 const AlbumView = ({
   selectedAlbum,
@@ -23,10 +22,7 @@ const AlbumView = ({
   const [eventData, setEventData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [deletePhotoId, setDeletePhotoId] = useState(null);
   const [photoToDelete, setPhotoToDelete] = useState(null);
-  const [deleteLoading, setDeleteLoading] = useState(false);
-  const [deleteError, setDeleteError] = useState(null);
 
   useEffect(() => {
     console.log("AlbumView useEffect - selectedAlbum:", selectedAlbum);
@@ -78,53 +74,18 @@ const AlbumView = ({
   // Funzione per chiudere il modale
   const closeDeleteModal = () => {
     setPhotoToDelete(null);
-    setDeleteError(null);
   };
 
-  // Funzione per eliminare la foto
-  const confirmDeletePhoto = async () => {
-    if (!photoToDelete || !photoToDelete.id) return;
-
-    setDeleteLoading(true);
-    setDeleteError(null);
-
-    try {
-      const token = localStorage.getItem("authToken");
-      const response = await fetch(
-        `https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/photos/${photoToDelete.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Errore durante l'eliminazione della foto");
-      }
-
-      // Aggiorna i dati dopo l'eliminazione
-      setEventData((prevData) => {
-        return {
-          ...prevData,
-          photos: prevData.photos.filter((p) => p.id !== photoToDelete.id),
-          photoCount: prevData.photoCount - 1,
-        };
-      });
-
-      // Chiudi il modale
-      closeDeleteModal();
-    } catch (error) {
-      console.error("Errore nell'eliminazione della foto:", error);
-      setDeleteError(
-        error.message ||
-          "Si è verificato un errore durante l'eliminazione della foto"
-      );
-    } finally {
-      setDeleteLoading(false);
-    }
+  // Funzione per aggiornare i dati dopo l'eliminazione della foto
+  const handlePhotoDelete = (deletedPhotoId) => {
+    setEventData((prevData) => {
+      return {
+        ...prevData,
+        photos: prevData.photos.filter((p) => p.id !== deletedPhotoId),
+        photoCount: prevData.photoCount - 1,
+      };
+    });
+    closeDeleteModal();
   };
 
   if (loading) {
@@ -252,93 +213,11 @@ const AlbumView = ({
 
       {/* Modale di conferma eliminazione */}
       {photoToDelete && (
-        <div
-          className="modal fade show d-block"
-          style={{ backgroundColor: "rgba(53, 34, 8, 0.5)" }}
-        >
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content bg-light-custom border-custom rounded-4">
-              <div className="modal-header bg-secondary-custom border-bottom border-custom rounded-top-4">
-                <h5 className="modal-title text-primary-custom">
-                  Conferma eliminazione
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={closeDeleteModal}
-                  disabled={deleteLoading}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <div className="d-flex align-items-center mb-3">
-                  <div className="me-3 text-danger">
-                    <AlertTriangle size={32} />
-                  </div>
-                  <div>
-                    <p className="mb-0 text-primary-custom">
-                      Sei sicuro di voler eliminare questa foto?
-                    </p>
-                    <p className="small text-muted-custom mb-0">
-                      Questa azione non può essere annullata.
-                    </p>
-                  </div>
-                </div>
-
-                {deleteError && (
-                  <div className="alert alert-danger mt-3" role="alert">
-                    {deleteError}
-                  </div>
-                )}
-
-                <div className="mt-3">
-                  <div
-                    className="rounded overflow-hidden"
-                    style={{ height: "150px" }}
-                  >
-                    <img
-                      src={photoToDelete.url}
-                      alt="Foto da eliminare"
-                      className="img-fluid w-100 h-100 object-fit-cover"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src =
-                          "https://i.pinimg.com/736x/2a/86/a5/2a86a560f0559704310d98fc32bd3d32.jpg";
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="modal-footer border-top border-custom">
-                <button
-                  type="button"
-                  className="btn btn-outline-custom"
-                  onClick={closeDeleteModal}
-                  disabled={deleteLoading}
-                >
-                  Annulla
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-danger d-flex align-items-center"
-                  onClick={confirmDeletePhoto}
-                  disabled={deleteLoading}
-                >
-                  {deleteLoading ? (
-                    <>
-                      <Loader size={16} className="me-2 animate-spin" />
-                      <span>Eliminazione...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Trash2 size={16} className="me-2" />
-                      <span>Elimina foto</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <DeletePhotoModal
+          photo={photoToDelete}
+          onClose={closeDeleteModal}
+          onDelete={handlePhotoDelete}
+        />
       )}
     </div>
   );

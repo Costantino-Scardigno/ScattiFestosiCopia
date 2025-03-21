@@ -14,6 +14,14 @@ const ShareAlbumModal = ({
   const [copyStatus, setCopyStatus] = useState("idle");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isClosing, setIsClosing] = useState(false);
+
+  // Reset isClosing quando il modale viene aperto
+  useEffect(() => {
+    if (isOpen) {
+      setIsClosing(false);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen && selectedAlbum) {
@@ -79,107 +87,156 @@ const ShareAlbumModal = ({
     setQrVisible(!qrVisible);
   };
 
+  // Gestione della chiusura con animazione
+  const handleClose = () => {
+    if (isClosing) return;
+
+    setIsClosing(true);
+
+    // Aggiungi le classi per l'animazione di chiusura
+    const modale = document.getElementById("share-album-modale");
+    const modaleBackDrop = document.getElementById("share-album-backdrop");
+
+    if (modale && modaleBackDrop) {
+      modale.classList.remove("animation");
+      modale.classList.add("animation-close");
+      modaleBackDrop.classList.remove("animation");
+      modaleBackDrop.classList.add("animation-close");
+
+      // Attendi che l'animazione finisca prima di chiudere effettivamente il modale
+      setTimeout(() => {
+        onClose();
+      }, 1000); // Durata dell'animazione (1 secondo)
+    } else {
+      // Fallback in caso gli elementi non vengano trovati
+      onClose();
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className="modal-backdrop">
+    <>
+      {/* Modale */}
       <div
-        className="modal-content bg-light-custom"
-        onClick={(e) => e.stopPropagation()}
+        id="share-album-modale"
+        className="modal animation"
+        style={{ display: "block" }}
+        tabIndex="-1"
       >
-        <div className="modal-header bg-secondary-custom rounded-top-4">
-          <h5 className="modal-title text-primary-custom">Condividi Album</h5>
-          <button
-            type="button"
-            className="btn-close"
-            onClick={onClose}
-            aria-label="Chiudi"
-          ></button>
-        </div>
-        <div className="modal-body p-4">
-          {isLoading ? (
-            <div className="text-center py-4">
-              <div
-                className="spinner-border text-secondary-custom"
-                role="status"
-              >
-                <span className="visually-hidden">Caricamento...</span>
-              </div>
-              <p className="mt-2 text-primary-custom">
-                Generazione del link di condivisione...
-              </p>
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content bg-light-custom">
+            <div className="modal-header bg-secondary-custom rounded-top-4">
+              <h5 className="modal-title text-primary-custom">
+                Condividi Album
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={handleClose}
+                aria-label="Chiudi"
+                disabled={isClosing}
+              ></button>
             </div>
-          ) : error ? (
-            <div className="alert alert-danger" role="alert">
-              {error}
-            </div>
-          ) : (
-            <>
-              <p className="mb-3 text-primary-custom">
-                Condividi l'album "{selectedAlbum?.name}" con i tuoi amici
-                utilizzando il link sottostante:
-              </p>
-              <div className="input-group mb-3">
-                <input
-                  type="text"
-                  className="form-control border-custom"
-                  value={shareLink}
-                  readOnly
-                />
-                <button
-                  className="btn btn-secondary-custom d-flex align-items-center"
-                  type="button"
-                  onClick={copyToClipboard}
-                >
-                  {copyStatus === "copied" ? (
-                    <>
-                      <Check size={18} className="me-1" />
-                      <span>Copiato</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy size={18} className="me-1" />
-                      <span>Copia</span>
-                    </>
-                  )}
-                </button>
-              </div>
-
-              <div className="d-flex justify-content-center mt-4">
-                <button
-                  className="btn btn-outline-custom d-flex align-items-center"
-                  onClick={toggleQrCode}
-                >
-                  <QrCode size={18} className="me-2" />
-                  {qrVisible ? "Nascondi QR Code" : "Mostra QR Code"}
-                </button>
-              </div>
-
-              {qrVisible && (
-                <div className="text-center mt-4">
-                  <div className="d-inline-block p-3 bg-white-custom rounded shadow-sm">
-                    <QRCodeSVG value={shareLink} size={200} />
+            <div className="modal-body p-4">
+              {isLoading ? (
+                <div className="text-center py-4">
+                  <div
+                    className="spinner-border text-secondary-custom"
+                    role="status"
+                  >
+                    <span className="visually-hidden">Caricamento...</span>
                   </div>
-                  <p className="mt-2 text-muted-custom">
-                    Scansiona questo QR code per aprire l'album
+                  <p className="mt-2 text-primary-custom">
+                    Generazione del link di condivisione...
                   </p>
                 </div>
-              )}
+              ) : error ? (
+                <div className="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              ) : (
+                <>
+                  <p className="mb-3 text-primary-custom">
+                    Condividi l'album "{selectedAlbum?.name}" con i tuoi amici
+                    utilizzando il link sottostante:
+                  </p>
+                  <div className="input-group mb-3">
+                    <input
+                      type="text"
+                      className="form-control border-custom"
+                      value={shareLink}
+                      readOnly
+                    />
+                    <button
+                      className="btn btn-secondary-custom d-flex align-items-center"
+                      type="button"
+                      onClick={copyToClipboard}
+                      disabled={isClosing}
+                    >
+                      {copyStatus === "copied" ? (
+                        <>
+                          <Check size={18} className="me-1" />
+                          <span>Copiato</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={18} className="me-1" />
+                          <span>Copia</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
 
-              <div className="alert alert-info mt-4" role="alert">
-                <strong>Nota:</strong> Chiunque abbia accesso a questo link
-                potrà visualizzare l'album e le relative foto.
-              </div>
-            </>
-          )}
-        </div>
-        <div className="modal-footer">
-          <button className="btn btn-secondary-custom" onClick={onClose}>
-            Chiudi
-          </button>
+                  <div className="d-flex justify-content-center mt-4">
+                    <button
+                      className="btn btn-outline-custom d-flex align-items-center"
+                      onClick={toggleQrCode}
+                      disabled={isClosing}
+                    >
+                      <QrCode size={18} className="me-2" />
+                      {qrVisible ? "Nascondi QR Code" : "Mostra QR Code"}
+                    </button>
+                  </div>
+
+                  {qrVisible && (
+                    <div className="text-center mt-4">
+                      <div className="d-inline-block p-3 bg-white-custom rounded shadow-sm">
+                        <QRCodeSVG value={shareLink} size={200} />
+                      </div>
+                      <p className="mt-2 text-muted-custom">
+                        Scansiona questo QR code per aprire l'album
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="alert alert-info mt-4" role="alert">
+                    <strong>Nota:</strong> Chiunque abbia accesso a questo link
+                    potrà visualizzare l'album e le relative foto.
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="modal-footer">
+              <button
+                className="btn btn-secondary-custom"
+                onClick={handleClose}
+                disabled={isClosing}
+              >
+                Chiudi
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Backdrop del modale */}
+      <div
+        id="share-album-backdrop"
+        className="modal-backdrop bg-modal animation"
+        style={{ backgroundColor: "rgba(53, 34, 8, 0.5)" }}
+      ></div>
+    </>
   );
 };
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import {
-  Image,
   Heart,
   MessageSquare,
   Share2,
@@ -10,6 +9,7 @@ import {
   ArrowLeft,
   Trash2,
 } from "lucide-react";
+import DeleteCommentModal from "./DeleteCommentModal";
 
 const PhotoView = ({
   selectedPhoto,
@@ -26,6 +26,13 @@ const PhotoView = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isLiked, setIsLiked] = useState(false); // Stato per tracciare se l'utente ha messo like
+  const [currentUser, setCurrentUser] = useState(null); // Stato per memorizzare l'utente corrente
+
+  // Stato per il modale di conferma eliminazione
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState(null);
+  const [deletingComment, setDeletingComment] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
 
   // Stato per la gestione dei commenti con paginazione
   const [displayedComments, setDisplayedComments] = useState([]);
@@ -37,6 +44,62 @@ const PhotoView = ({
   // Ref per il contenitore dei commenti
   const commentsContainerRef = useRef(null);
   const FormCommentRef = useRef(null);
+
+  // Effetto per ottenere le informazioni dell'utente corrente
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (!token) return;
+
+    // Prima dobbiamo decodificare il token JWT per ottenere il nome utente
+    // Il token JWT è diviso in tre parti: header.payload.signature
+    try {
+      const tokenParts = token.split(".");
+      if (tokenParts.length !== 3) {
+        console.error("Token JWT non valido");
+        return;
+      }
+
+      // Decodifica la parte payload (seconda parte) del token
+      const payload = JSON.parse(atob(tokenParts[1]));
+      const username = payload.sub || payload.username; // 'sub' è standard in JWT per il subject
+
+      if (!username) {
+        console.error("Nome utente non trovato nel token");
+        return;
+      }
+
+      fetch(
+        `https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/users/${username}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Errore nel recupero delle informazioni utente");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setCurrentUser({
+            ...data,
+            username: username, // Assicuriamoci che il nome utente sia disponibile
+          });
+        })
+        .catch((error) => {
+          console.error(
+            "Errore nel recupero delle informazioni utente:",
+            error
+          );
+        });
+    } catch (error) {
+      console.error("Errore nella decodifica del token:", error);
+    }
+  }, []);
 
   // Effetto per caricare i dettagli della foto
   useEffect(() => {
@@ -114,6 +177,19 @@ const PhotoView = ({
       });
   };
 
+  // Funzione per verificare se l'utente corrente è l'autore del commento
+  const isCommentAuthor = (comment) => {
+    if (!currentUser) return false;
+
+    // Confronta l'ID utente o username
+    return (
+      (comment.userId && currentUser.id && comment.userId === currentUser.id) ||
+      (comment.username &&
+        currentUser.username &&
+        comment.username === currentUser.username)
+    );
+  };
+
   // Funzione per gestire il click sul pulsante like
   const handleToggleLike = () => {
     setIsLiked(!isLiked);
@@ -181,55 +257,78 @@ const PhotoView = ({
     addComment(selectedPhoto.id, newComment);
   };
 
+  // Apre il modale di conferma e imposta il commento da eliminare
+  const openDeleteModal = (comment) => {
+    setCommentToDelete(comment);
+    setShowDeleteModal(true);
+    setDeleteError(null);
+  };
+
+  // Chiude il modale di conferma
+  const closeDeleteModal = () => {
+    setCommentToDelete(null);
+    setShowDeleteModal(false);
+    setDeleteError(null);
+  };
+
   // Gestisce l'eliminazione di un commento
-  const handleDeleteComment = (commentId) => {
-    if (!commentId) return;
+  const handleDeleteComment = () => {
+    if (!commentToDelete || !commentToDelete.id) return;
 
-    if (window.confirm("Sei sicuro di voler eliminare questo commento?")) {
-      // Recupera il token dal localStorage
-      const token = localStorage.getItem("authToken");
+    setDeletingComment(true);
+    setDeleteError(null);
 
-      fetch(
-        `https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/comments/${commentId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+    // Recupera il token dal localStorage
+    const token = localStorage.getItem("authToken");
+
+    fetch(
+      `https://dominant-aubine-costantino-127b0ac1.koyeb.app/api/comments/${commentToDelete.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Errore nell'eliminazione del commento");
         }
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Errore nell'eliminazione del commento");
-          }
-          // Aggiorna la lista dei commenti visualizzati rimuovendo quello eliminato
-          setDisplayedComments(
-            displayedComments.filter((comment) => comment.id !== commentId)
-          );
+        // Aggiorna la lista dei commenti visualizzati rimuovendo quello eliminato
+        setDisplayedComments(
+          displayedComments.filter(
+            (comment) => comment.id !== commentToDelete.id
+          )
+        );
 
-          // Se ci sono più commenti disponibili, aggiorna anche i dettagli della foto
-          if (photoDetails && photoDetails.comments) {
-            const updatedComments = photoDetails.comments.filter(
-              (comment) => comment.id !== commentId
-            );
-            setPhotoDetails({
-              ...photoDetails,
-              comments: updatedComments,
-            });
-          }
-
-          if (typeof deleteComment === "function") {
-            deleteComment(commentId);
-          }
-        })
-        .catch((error) => {
-          console.error("Errore nell'eliminazione del commento:", error);
-          alert(
-            "Non è stato possibile eliminare il commento: " + error.message
+        // Se ci sono più commenti disponibili, aggiorna anche i dettagli della foto
+        if (photoDetails && photoDetails.comments) {
+          const updatedComments = photoDetails.comments.filter(
+            (comment) => comment.id !== commentToDelete.id
           );
-        });
-    }
+          setPhotoDetails({
+            ...photoDetails,
+            comments: updatedComments,
+          });
+        }
+
+        if (typeof deleteComment === "function") {
+          deleteComment(commentToDelete.id);
+        }
+
+        // Chiudi il modale
+        closeDeleteModal();
+      })
+      .catch((error) => {
+        console.error("Errore nell'eliminazione del commento:", error);
+        setDeleteError(
+          "Non è stato possibile eliminare il commento: " + error.message
+        );
+      })
+      .finally(() => {
+        setDeletingComment(false);
+      });
   };
 
   // Formatta la data in modo leggibile
@@ -294,7 +393,7 @@ const PhotoView = ({
 
   return (
     <div className="card shadow-sm border-custom rounded-top-5">
-      <div className="card-header  rounded-top-5 bg-dashboard d-flex align-items-center  ">
+      <div className="card-header rounded-top-5 bg-dashboard d-flex align-items-center">
         <button
           className="bg-dashboard border-0 rounded-circle me-2"
           onClick={() => setSelectedPhoto(null)}
@@ -307,7 +406,7 @@ const PhotoView = ({
       </div>
 
       <div className="row g-0">
-        <div className="col-md-8  bg-dashboard">
+        <div className="col-md-8 bg-dashboard">
           <div className="bg-dark text-center">
             <img
               src={photo.url}
@@ -320,7 +419,7 @@ const PhotoView = ({
               }}
             />
           </div>
-          <div className="bg-dashboard  p-3 ">
+          <div className="bg-dashboard p-3">
             <div className="d-flex justify-content-between align-items-center">
               <div className="d-flex align-items-center gap-3">
                 <button
@@ -360,11 +459,11 @@ const PhotoView = ({
         </div>
 
         <div
-          className="col-md-4 bg-dashboard  d-flex flex-column"
+          className="col-md-4 bg-dashboard d-flex flex-column"
           style={{ minHeight: "300px" }}
         >
           <div
-            className="flex-grow-1  overflow-auto p-3 "
+            className="flex-grow-1 overflow-auto p-3"
             ref={commentsContainerRef}
             style={{ maxHeight: "568px" }}
           >
@@ -380,7 +479,7 @@ const PhotoView = ({
                     key={comment.id}
                     className="d-flex justify-content-between align-items-start border-start border-bottom border-top border-end p-3 rounded-5 shadow-sm"
                   >
-                    <div className="d-flex ">
+                    <div className="d-flex">
                       <div
                         className="rounded-circle bg-secondary-custom d-flex align-items-center justify-content-center me-2"
                         style={{ width: "32px", height: "32px" }}
@@ -405,13 +504,16 @@ const PhotoView = ({
                       </div>
                     </div>
                     <div>
-                      <button
-                        className="btn btn-sm text-danger p-0"
-                        onClick={() => handleDeleteComment(comment.id)}
-                        title="Elimina commento"
-                      >
-                        <Trash2 size={14} />
-                      </button>
+                      {/* Mostra il pulsante di eliminazione solo se l'utente è l'autore del commento */}
+                      {isCommentAuthor(comment) && (
+                        <button
+                          className="btn btn-sm text-danger p-0"
+                          onClick={() => openDeleteModal(comment)}
+                          title="Elimina commento"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -430,8 +532,8 @@ const PhotoView = ({
             )}
           </div>
 
-          <div className="p-3  mt-4  border-top ">
-            <div className="d-flex align-items-center ">
+          <div className="p-3 mt-4 border-top">
+            <div className="d-flex align-items-center">
               <div
                 className="rounded-circle bg-secondary-custom d-flex align-items-center justify-content-center me-2"
                 style={{ width: "32px", height: "32px" }}
@@ -465,6 +567,16 @@ const PhotoView = ({
           </div>
         </div>
       </div>
+
+      {/* Utilizzo del componente modale per l'eliminazione del commento */}
+      <DeleteCommentModal
+        isOpen={showDeleteModal}
+        onClose={closeDeleteModal}
+        onConfirm={handleDeleteComment}
+        comment={commentToDelete}
+        isDeleting={deletingComment}
+        error={deleteError}
+      />
     </div>
   );
 };
