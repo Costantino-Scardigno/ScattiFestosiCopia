@@ -1,12 +1,3 @@
-.navbar {
-  background-color: #f8f3ea !important;
-  border-color: #d4ad6a !important;
-}
-
-.nav-link:hover {
-  color: #e1bb80 !important;
-}
-
 .btn-sign {
   background-color: #e1bb80 !important;
   color: #352208 !important;
@@ -28,6 +19,18 @@
   transform: translateY(-2px);
 }
 
-.react-icon {
-  margin-left: 8px;
+.nav-link-custom {
+  border-bottom: none;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-collapse .nav-link-custom {
+    border-bottom: 1px solid #d4ad6a;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .navbar-collapse .nav-item:last-child .nav-link-custom {
+    border-bottom: none;
+  }
 }

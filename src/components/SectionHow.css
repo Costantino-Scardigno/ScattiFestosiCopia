@@ -5,6 +5,12 @@
 @media (max-width: 1200px) {
   .fixed-height {
     height: 250px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 425px) {
+  .fixed-height {
+    height: 320px;
   }
 }

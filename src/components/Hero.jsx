@@ -10,16 +10,13 @@ function MyHero({ setShowForm }) {
     <section className="container-fluid padding-top-5 bg-light-custom">
       <div className="row">
         <div className="col-md-12 col-lg-12 col-xl-12 col-xxl-7 d-flex flex-column justify-content-between px-4">
-          <h1
-            id="my-text"
-            className="display-1 fw-bold lh-sm text-primary-custom"
-          >
+          <h1 id="my-text" className="fw-bold lh-1 text-primary-custom">
             Il modo semplice e gratuito numero 1 per raccogliere{" "}
             <span className="font-effect">foto</span> e{" "}
             <span className="font-effect text-secondary-custom">video</span> dei
             tuoi ospiti.
           </h1>
-          <p className="fs-1 fw-lighter m-0 text-primary-custom">
+          <p className="fs-1 lh-sm fw-lighter m-0 text-primary-custom mt-sm-3">
             Abbiamo reso facile e semplice la raccolta di foto e video in tempo
             reale in un album condiviso accessibile ai tuoi invitati
           </p>

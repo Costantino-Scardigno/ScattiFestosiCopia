@@ -10,7 +10,7 @@ function MyNavbar({ setShowForm }) {
   return (
     <Navbar
       expand="lg"
-      className="fixed-top border-top border-bottom mb-5 bg-light-custom p-4"
+      className="fixed-top  border-bottom mb-5 bg-light-custom p-4"
     >
       <Container fluid className="justify-content-between px-4">
         <Navbar.Brand className="fs-4" href="#home">
@@ -22,40 +22,42 @@ function MyNavbar({ setShowForm }) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link
-              className="fs-4 btn-animated text-primary-custom"
+              className="fs-4 btn-animated text-primary-custom nav-link-custom"
               href="#how"
             >
               Come funziona
             </Nav.Link>
             <Nav.Link
-              className="fs-4 btn-animated text-primary-custom"
+              className="fs-4 btn-animated text-primary-custom nav-link-custom"
               href="#recensioni"
             >
               Recensioni
             </Nav.Link>
             <Nav.Link
-              className="fs-4 btn-animated text-primary-custom"
+              className="fs-4 btn-animated text-primary-custom nav-link-custom"
               href="#utilità"
             >
               Utilità
             </Nav.Link>
           </Nav>
-          <Button
-            onClick={() => setShowForm(true)}
-            className="btn-animated fs-5 text-primary-custom"
-            variant=""
-          >
-            Login
-          </Button>
-          <Button
-            onClick={() => setShowForm(true)}
-            className="btn-sign rounded-pill border-custom bg-secondary-custom text-primary-custom"
-            variant=""
-            size="lg"
-          >
-            Registrati
-            <GoArrowDownRight className="react-icon" />
-          </Button>
+          <div className="d-flex justify-content-between mt-1 mt-sm-1 border-custom">
+            <Button
+              onClick={() => setShowForm(true)}
+              className="btn-animated fs-4 p-0 pe-3 text-primary-custom"
+              variant=""
+            >
+              Login
+            </Button>
+            <Button
+              onClick={() => setShowForm(true)}
+              className="btn-sign rounded-pill border-custom bg-secondary-custom text-primary-custom"
+              variant=""
+              size="lg"
+            >
+              Registrati
+              <GoArrowDownRight className="react-icon" />
+            </Button>
+          </div>
         </Navbar.Collapse>
       </Container>
     </Navbar>

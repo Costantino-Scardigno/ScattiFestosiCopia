@@ -484,7 +484,15 @@ const PhotoView = ({
                         className="rounded-circle bg-secondary-custom d-flex align-items-center justify-content-center me-2"
                         style={{ width: "32px", height: "32px" }}
                       >
-                        <User size={16} className="text-primary-custom" />
+                        {comment.profileImage ? (
+                          <img
+                            src={comment.profileImage}
+                            alt="immagine di profilo"
+                            className="w-100 h-100 rounded-circle object-fit-cover"
+                          />
+                        ) : (
+                          <User size={24} className="text-white-custom" />
+                        )}
                       </div>
                       <div>
                         <div>

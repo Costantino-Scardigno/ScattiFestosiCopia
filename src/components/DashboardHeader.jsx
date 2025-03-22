@@ -83,13 +83,13 @@ const DashboardHeader = ({ onSearch, searchQuery, setSearchQuery }) => {
         setUser(userData);
       } catch (error) {
         console.error("Errore nel recupero dati utente:", error);
-        // Gestione degli errori più robusta
+
         setUser(null);
       }
     };
 
     fetchUserData();
-  }, [navigate]); // Aggiungi navigate come dipendenza
+  }, [navigate]);
 
   return (
     <nav className="px-0 py-2 bg-dashboard">

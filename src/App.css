@@ -134,7 +134,7 @@ body {
 
 /* Bordi */
 .border-custom {
-  border-color: var(--border-color);
+  border-color: var(--border-color) !important;
 }
 
 .border-dashed-custom {

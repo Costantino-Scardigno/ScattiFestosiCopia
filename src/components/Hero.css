@@ -1,19 +1,36 @@
 .padding-top-5 {
-  padding-top: 170px;
+  padding-top: 120px;
   padding-bottom: 20px;
 }
 
+#my-text {
+  font-size: 6rem;
+}
 @media (max-width: 1440px) {
   #my-text {
-    font-size: 4rem;
+    font-size: 4.8rem;
+  }
+}
+@media (min-width: 426px) and (max-width: 600px) {
+  #my-text {
+    font-size: 2.8rem;
+  }
+  .padding-top-5 {
+    padding-top: 110px;
+  }
+}
+
+@media (max-width: 320px) {
+  #my-text {
+    font-size: 2.5rem;
   }
 }
 @media (max-width: 425px) {
   #my-text {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
   }
   .padding-top-5 {
-    padding-top: 100px;
+    padding-top: 110px;
   }
 }
 

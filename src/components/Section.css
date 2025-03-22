@@ -1,14 +1,11 @@
 .responsive-icon {
-  font-size: 3rem;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
+  width: 40px;
+  height: 40px;
 }
 
-@media (min-width: 320px) and (max-width: 425px) {
+@media (min-width: 300px) and (max-width: 425px) {
   .responsive-icon {
-    font-size: 10rem;
-    padding-inline: 0;
-    margin-right: 1rem;
-    margin-left: 0.5rem;
+    width: 30px;
+    height: 30px;
   }
 }
