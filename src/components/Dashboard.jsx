@@ -7,7 +7,6 @@ import UploadPhotoModal from "./UploadPhotoModal";
 import ShareAlbumModal from "./ShareAlbumModal";
 import "./Dashboard.css";
 import DashboardModal from "./DashboardModal";
-import DashboardSideBar from "./DashboardSideBar.jsx";
 import DashboardFolders from "./DashboardFolders.jsx";
 
 const Dashboard = () => {

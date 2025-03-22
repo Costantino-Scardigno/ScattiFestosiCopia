@@ -4,9 +4,9 @@
   width: 75vw;
   max-width: 800px;
   padding: 50px 30px 50px 20px;
-  background: #fdfde1;
+  background: #f8f3ea;
   border-radius: 24px;
-  box-shadow: 1px 1px 5px #dd732c;
+  border: 2px solid #d4ad6a;
 }
 
 .card-2 img {
@@ -27,14 +27,14 @@
   margin-top: 0;
   margin-right: 30px;
   margin-bottom: 6px;
-  color: black;
+  color: var(--primary-color);
 }
 
 .card-2 h3 {
   font-size: 16px;
   font-weight: 400;
   margin: 0 0 12px;
-  color: black;
+  color: var(--muted-color);
   opacity: 0.66;
 }
 
@@ -43,28 +43,11 @@
   font-weight: 400;
   margin-bottom: 30px;
   opacity: 0.42;
+  color: var(--muted-color);
 }
 
 .card-2 .star-color {
   color: #dd732c;
-}
-
-.card-2 button {
-  border: 1px solid #f8f8f8;
-  background: transparent;
-  color: #f8f8f8;
-  width: 40%;
-  min-width: 100px;
-  text-align: center;
-  font-family: inherit;
-  padding: 12px 26px;
-  font-size: 16px;
-  border-radius: 40px;
-}
-
-.card-2 button.primary {
-  background: #ffffff;
-  color: #121017;
 }
 
 @media (width <= 600px) {
@@ -77,14 +60,6 @@
     text-align: center;
     flex-direction: column;
     height: 500px;
-  }
-
-  .card-2 .buttons {
-    justify-content: center;
-  }
-
-  .card-2 .buttons button {
-    width: 50%;
   }
 
   .card-2 h2 {
